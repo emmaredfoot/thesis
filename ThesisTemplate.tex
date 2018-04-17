@@ -23,15 +23,16 @@
 \usepackage[printonlyused]{acronym} % Use [nolist,nohyperlinks] to not write list of acronyms and not put hyperlinks to entries in list.
 % ** Add any packages you want to use here **
 \usepackage{graphicx}
+\usepackage{mathtools}
 \usepackage{caption}
 \usepackage{subcaption}
-
+\usepackage{pdflscape}
 \makeatletter  % ** DO NOT REMOVE THIS ** (Actually, remove it, compile, and enjoy the stream of errors. Its beautiful :) )
 
 
 % --------------------------------------------------------------------------
 % Thesis Information
-\title{Allocating Heat and Electricity Resources in a Nuclear Renewable Hybrid Energy System Using Cyclus}
+\title{Exergy Analysis of a Nuclear Renewable Hybrid Energy System Paired to a Multistage Flash Distillation System}
 \author{Emma K. Redfoot}
 \thesisdegree{Master of Science}  % e.g Master of Science, Master of Engineering, etc.
 \major{Nuclear Engineering}  % e.g Computer Science, Computer Engineering, etc.
@@ -80,12 +81,12 @@ pdfprintscaling={AppDefault}]
 %\makeatother
 
 % Where to look for images
-% (https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics#Graphics_storage)
+% (https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics\#Graphics_storage)
 % \graphicspath{ {./Figures/} }
 
 % Uncomment to set default style for Listings to be code (Code style is defined in .cls file)
 % \lstset{style=code}
-
+\usepackage{pdfpages}
 
 % -------------------------------------------------------------------------
 \begin{document}
@@ -123,8 +124,7 @@ pdfprintscaling={AppDefault}]
 	{\LARGE\textsc{Abstract}}
 \end{center}
 
-Growing concerns over the impact of fossil fuels on climate change are driving efforts to use more low emission fuel sources. In response, fluctuating renewable energy sources, such as solar and wind power, are growing to meet more of the electric demand. However, maintaining reliable energy accessibility to the grid requires a stable, non-fluctuating source of power. Nuclear power plants provide low emissions, reliable energy to the grid \cite{IPCC}. To best reduce reliance on fossil fuels while ensuring reliable energy generation and profitability, nuclear renewable hybrid energy systems (NRHES) focus on electrically and thermally coupling renewable generation with a nuclear power plant (NPP) by co-locating the generation sources on an industrial park. The industrial park is comprised of at least the NPP, the renewable energy source, and some form of industrial process that consumes the energy not used by the grid.
-This paper analyzes the computational modeling approaches currently being pursued for NRHES, especially the potential benefits of using a Nuclear Fuel Cycle Simulator (NFCS). The paper begins by reviewing past research to determine the necessary software capabilities for an NRHES model. We then discuss the characteristics of a NFCS. The research points towards using the Cyclus fuel cycle simulator as the only open source fuel cycle simulator built with flexibility and modularity in mind. A prototype NRHES model is built and evaluated for benefits of further research. Another challenge NRHES face is finding a figure of merit (FOM) that fully describes the grid reliability and value of the industrial processes of NRHES. Two approaches are evaluated to evaluate NRHES, an Analytical Hierarchy Process and a dimensional analysis approach.  Finally, results and future research are discussed.
+Growing concerns over the impact of fossil fuels on climate change are driving efforts to use more low emission fuel sources. In response, fluctuating renewable energy sources, such as solar and wind power, are growing to meet more of the electric demand. However, maintaining reliable energy accessibility to the grid requires a stable, dispatchable source of power. Nuclear power plants provide low emission, reliable energy to the grid \cite{IPCC}. To best reduce reliance on fossil fuels while ensuring reliable energy generation and profitability, nuclear renewable hybrid energy systems (NRHES) focus on electrically and thermally coupling renewable generation with a nuclear power plant (NPP) by co-locating the generation sources on an industrial park. The industrial park is comprised of at least the NPP, the renewable energy source, and some form of industrial process that consumes the energy not used by the grid. The main question this thesis focuses on is what are the economic and exergy benefits of thermally coupling an industrial process to the nuclear power plant in a NRHES as opposed to electrically coupling. This paper analyzes the computational modeling approaches currently being pursued for NRHES. Initially, the thesis begins by reviewing past research to determine the necessary software capabilities for an NRHES model. Another challenge NRHES face is finding a figure of merit (FOM) that fully describes the grid reliability and value of the industrial processes of NRHES. Two approaches are evaluated to evaluate NRHES, an Analytical Hierarchy Process and the introduction of a new Avoided Cost of Feedstock approach.  Finally, results and future research are discussed.
 
 \newpage
 
@@ -225,17 +225,16 @@ This paper analyzes the computational modeling approaches currently being pursue
 % \acresetall  % Use this if you want acronyms to be fully stated upon first use again, such as in new chapters
 
 As any nation prepares to meet their respective demands for energy, they are faced with the challenge of addressing four major issues. First, the sources of energy production must produce sufficient energy reliably to meet the demands of growing populations and economies. Second, the serious threat of climate change and air pollution due to emissions demands alternatives that can fuel economic growth while minimizing damage to the planet. Third, the sources of energy must be flexible enough to respond to seasonal and hourly fluctuations in demand. Finally, all of the above objectives must be met through economically viable combinations of energy sources that are affordable.
-No one source of energy has optimized all four of these objectives. Coal-fired energy has fueled the economic growth of most developed nations, producing vast amounts of energy and creating a reliable grid for distributing that energy. But the environmental and safety costs of coal have been enormous, which has led to the search for viable alternatives. Natural gas, the primary affordable alternative, has less particulate pollution but does not reduce carbon emissions. Natural gas power plants, unlike nuclear and coal power plants, were built with flexibility in mind and are the typical load following means of energy production \cite{MITEnergyInitiative2011}. Renewable sources - such as solar, wind and hydro - have grown significantly, but their capacity to generate sufficient energy and respond to fluctuating demand have limited their utility. Nuclear power is clean and reliable, but its affordability and flexibility are issues to address.
-Various ways of integrating non-emitting sources of power, such as solar, wind, and nuclear, provide approaches to addressing the four objectives listed above - reducing greenhouse gas emissions while increasing grid reliability and flexibility. Nuclear Renewable Hybrid Energy Systems (NRHES) are power systems that combine and often co-locate different facilities with a nuclear power plant - for example, with a renewable source, a battery, an industrial process, and/or a natural gas plant.  NRHES is a proposed solution that combines the capacity and reliability of a nuclear power plant (NPP) with greater flexibility.  Three ways to achieve greater flexibility without sacrificing reliability include: 1) more flexible production to load follow as with natural gas; 2) greater storage capacity provided through various types of batteries; and 3)  allocation strategies that direct excess heat or electricity to an industrial process when the grid has lower demand. NRHESs focus on the third strategy to create a reliable, flexible system while seeking to minimize emissions to a level significantly less than a renewable source combined with a natural gas plant \cite{Baker2016}.
-Making decisions about investing in nuclear renewable hybrid energy systems to meet future energy demand requires developing rigorous simulations to determine each system's financial viability as well as its technical capacity to provide reliable, clean energy under different geographic, technical, and economic scenarios. In addition, decision-makers need tools that allow them to prioritize the objectives listed above to respond to local needs and policy objectives.
+No one source of energy has optimized all four of these objectives. Coal-fired energy has fueled the economic growth of most developed nations, producing vast amounts of energy and creating a reliable grid for distributing that energy. But the environmental and safety costs of coal have been enormous, which has led to the search for viable alternatives. Natural gas, the primary affordable alternative, has less particulate pollution but does not reduce carbon emissions. Natural gas power plants, unlike nuclear and coal power plants, were built with flexibility in mind and are the typical load following means of energy production \cite{MITEnergyInitiative2011}. Renewable sources - such as solar, wind and hydro - have grown significantly, but their capacity to generate sufficient energy and respond to fluctuating demand have limited their utility. Nuclear power is low-emitting and reliable, but its affordability and flexibility are issues to address.
+Various ways of integrating non-emitting sources of power, such as solar, wind, and nuclear, provide approaches to addressing the four objectives listed above - reducing greenhouse gas emissions while increasing grid reliability and flexibility. Nuclear Renewable Hybrid Energy Systems (NRHES) are power systems that combine and often co-locate different facilities with a nuclear power plant - for example, with a renewable source, a battery, an industrial process, and possibly a natural gas plant.  NRHES is a proposed solution that combines the capacity and reliability of a nuclear power plant (NPP) with greater flexibility.  Three ways to achieve greater flexibility without sacrificing reliability include: 1) more flexible production to load follow as with natural gas; 2) greater storage capacity provided through various types of batteries; and 3)  allocation strategies that direct excess heat or electricity to an industrial process when the grid has lower demand. NRHESs focus on the third strategy to create a reliable, flexible system while seeking to minimize emissions to a level significantly less than a renewable source combined with a natural gas plant \cite{Baker2016}.
+Making decisions about investing in nuclear renewable hybrid energy systems to meet future energy demand requires developing rigorous simulations to determine each system's financial viability as well as its technical capacity to provide reliable, clean energy under different geographic, technical, and economic scenarios. In addition, decision-makers need tools that allow them to prioritize the objectives listed above to respond to local needs and policy objectives. One approach that ties the economic to the technical aspects of the NRHES is an exergetic efficiency analysis.
 
 
-To address these issues, this thesis begins with a review of the existing literature covering both nuclear and non-nuclear hybrid energy systems, including a discussion of the ongoing research on modeling nuclear hybrid energy systems to evaluate the important characteristics to include in any model. The paper describes nuclear fuel cycle simulators (NFCS) and analyzes the benefits and drawbacks of using such simulators to model nuclear renewable hybrid energy systems.  Accessibility through using an open source platform and a popular programming language are found to be the primary benefits of using a NFCS. Cyclus is the only open source nuclear fuel cycle simulator.
-The second part of the thesis uses Cyclus's open source structure as well as its flexibility and modular design to develop a NRHES model using the nuclear fuel cycle simulator. The design will include a nuclear reactor, a (whatever the AHP returns as best), and the grid. The model evaluates the overall usability of Cyclus for modeling a NRHES as well as determines the efficiency benefits of a thermally and electrically coupled industrial process, as opposed to a strictly electrically coupled system.
-Finally, this thesis will discuss the current approaches to quantifying electricity costs and reliability. After analyzing ways of measuring a NRHES, this thesis will propose a decision-making tool for comparing various NRHES designs using an Analytic Hierarchy Process (AHP).  Dimensional Analysis will also be used to determine a unitless value that can measure the dispatchability, safety, emissions, and profitability of a NRHES configuration.
+To address these issues, this thesis begins with a review of the existing literature covering both nuclear and non-nuclear hybrid energy systems.  Then this thesis will discuss the applicability of the decision-making tool Analytic Hierarchy Process (AHP) for comparing various NRHES designs.  Then the exergy analysis will rely on three separate models built in Aspen HYSYS. All the NRHES designs will include a nuclear reactor, a desalination system, and the grid. In order to evaluate both the \$/exergy values of thermally and electrically coupling the industrial process in a NRHES, both a multistage flash as well as a reverse osmosis system will be evaluated.
+Finally, this thesis will discuss the current approaches to quantifying electricity costs and reliability. After analyzing ways of measuring a NRHES,
 \section{Current Grid Challenges}
 With fluctuating power sources increasing, along with the general seasonal and daily fluctuations in power demand, the grid needs to be more flexible than ever before. In order to ensure grid reliability, defined as consistent electricity supplied to customers with a high penetration of fluctuating sources of power, traditional base load generating sources, such as nuclear power plants, will need to increase their ability to fluctuate output to the electric grid \cite {Denholm2011}. For example, when wind decreases its electricity output, other sources of electricity need to respond quickly to make up for the loss. To supply electricity to a system that includes variable contributing sources, nuclear generation must be able to quickly increase and decrease its grid contribution.
-Reducing energy output below capacity for NPPs is sub-optimal primarily due to economic inefficiency.  \cite{Nuclear2011}. NPPs are almost entirely comprised of fixed and sunk costs, such as the capital to construct the reactor and the salaries of the employees. The majority of the costs for nuclear are capital and operations (not including fuel), costs that do not depend on how much electricity is sold. As of 2010, nuclear fuel accounts for about 10\% of the levelized cost of electricity, a standard measure of the price per unit of energy produced which will be discussed in detail later, as compared to 70\%-80\% for natural gas \cite{IEA/NEA}. Due to the relatively small role the fuel plays in the overall costs of running an NPP operation, lowering the power output does not greatly reduce the generating costs. Along with the economic considerations, the materials impacts  of fluctuating older nuclear power plants that were not designed for such maneuverability can accelerate the aging of the power plant, causing physical and economic damage \cite{Nuclear2011}. Assuming economic conditions in the energy sector remain constant, NPPs must run at near full capacity to compete economically and avoid materials degradation.
+Reducing energy output below capacity for NPPs is sub-optimal primarily due to economic inefficiency\cite{Nuclear2011}. NPPs are almost entirely comprised of fixed and sunk costs, such as the capital to construct the reactor and the salaries of the employees. The majority of the costs for nuclear are capital and operations (not including fuel), costs that do not depend on how much electricity is sold. As of 2010, nuclear fuel accounts for about 10\% of the levelized cost of electricity, a standard measure of the price per unit of energy produced which will be discussed in detail later, as compared to 70\%-80\% for natural gas \cite{IEA/NEA}. Due to the relatively small role the fuel plays in the overall costs of running an NPP operation, lowering the power output does not greatly reduce the generating costs. Along with the economic considerations, the materials impacts  of fluctuating older nuclear power plants that were not designed for such maneuverability can accelerate the aging of the power plant, causing physical and economic damage \cite{Nuclear2011}. Assuming economic conditions in the energy sector remain constant, NPPs must run at near full capacity to compete economically and avoid materials degradation.
 
 The purpose of the literature review is:
 \begin{itemize}
@@ -272,16 +271,20 @@ NRHES sit in an interesting location in computational modeling. There are many t
 \section{NRHES Models}
 Selecting a tool to model a NRHES requires understanding what characteristics a model must possess in order to provide accurate information. For example, as discussed below, it is important for a NRHES model to incorporate the dynamic nature of the system in order to include losses from the fluctuations in the system. Understanding the differences among the underlying mathematical models as well as the software functionality is essential in determining whether and how a nuclear fuel cycle simulator (NFCS) will be useful to NRHES modeling.
 As mentioned above, the model currently under development by Oak Ridge National Laboratory, Argonne National Laboratory, and Idaho National Laboratory has reviewed the essential characteristics for a computational model of NRHES. Rabiti et al. (2015) discusses the important elements of a NRHES computational model in detail, describing the basic requirements of the software as a "computational representation of the thermal, mechanical, chemical, and electrical processes in the systems as process units, reactors, manufacturing plants, and energy delivery (to the appropriate point of interface with the market transaction, such as an electricity bus, or a product depot or distribution terminal where a commodity price is established)"\cite{Rabiti2015}. The model in development by the national laboratories combines RAVEN (Reactor Analysis and Virtual Control Environment) for the stochastic and statistical aspects of the system, such as generating synthetic wind data and optimizing the systems with Modelica for modeling the various components in the NRHES.
-\section{RAVEN}
-The RAVEN tool was initially built for probabilistic risk assessment. As a probabilistic tool, RAVEN is "able to perform parametric and stochastic analysis based on the response of complex system codes\cite{RabitiRAVEN}." For example, RAVEN can run thousands of different wind energy generation paths to produce a statistically fair representation of how wind power would likely function over any given hour. RAVEN can also generate generic seasonal wind generation over a week. The week long synthetic wind data for summer, winter, and fall/spring can then be extrapolated to represent the whole season, which, in turn, can be extrapolated to represent however long of a time frame is desired to run the NRHES simulation. While the current goal is to create a generic model, it can be tailored to specific regions, defining the costs of inputs such as water and natural gas based on the typical regional price, as well as selling the electricity for the current regional rate. Using synthetic generated data instead of historic data avoids the critique that the model only represents past behavior and is thus inapplicable to future trends \cite{redfoot_epiney_2016}. RAVEN is also used to determine high-risk time series samples to ensure that high risk scenarios are accounted for when desired in a study. In addition, RAVEN can calculate the loss of load probability and the sensitivity to uncertainty analysis due to the figures of merit reliance on a probabilistic approach.
+\subsection{Modelica}
+Modelica is a widely used open source language for modeling large and complex systems composed of smaller component models. It is particularly optimized for modeling dynamic systems. Modelica has powerful libraries, such as Thermopower, that include the thermohydraulic modeling tools required for modeling mass flows in energy systems \cite{Binder2014}. The language is well-maintained, giving it the added benefits of having up-to-date documentation and a community that can provide support. Typically Modelica is run on the Dymola developer environment, a private tool developed by the creator of Modelica, Dr. Hilding Elmquist. Another option for running the Modelica language is the open source OpenModelica environment.
 
-\section{Dynamic Modeling}
-Garcia et. al. (2013) and Du et. al. (2014) apply dynamic approaches to modeling hybrid energy systems (HES) to appropriately address the impacts of flexible operation of the system due to variable renewable generation \cite{Garcia2013, Du2014}. In Du et. al. (2014). Two optimization problems are addressed: the first minimizes variability in the HES through optimizing components of the HES system, and the second imposes operating and capital costs on the design variables. Garcia et. al. (2013) has a two-part series. The first applies and analyzes performance of a dynamic approach to modeling some of the physical components of a traditional and an advanced (which produces goods besides electricity) HES. The second paper focuses on economic effects using a dynamic approach, as opposed to time series or statistical analysis. Overall, both parts of the series focus on how a dynamic approach better models the high level of variability of a HES for output generation and profitability maximization \cite{Garcia2013}.
-The costs of operating in a flexible manner, dynamically allocating resources between multiple coupled systems, are substantial enough to require a simulation that models the variability of the system at a high fidelity \cite{Garcia2013, Shropshire2011, Locatelli2015}. The dynamic modeling at this point focuses on the dynamic transfer of energy to different sources, and how this transfer impacts the economics and grid reliability. The dynamic allocation of the heat and electricity depending on the renewable generation and the grid demand is an essential characteristic of an NRHES.  Including factors such as how quickly the NRHES will be able to switch between providing energy to the industrial facility and the grid will impact determining whether a NRHES is worth pursuing.  To account for the dynamic nature of the system, NRHES requires either a continuous dynamic model or a high fidelity discrete  model with a very short time step, in the range of an hour at worst, and preferably in the minute scale.
-\section{Modelica}
-Modelica is a widely used open source language for modeling large and complex systems composed of smaller component models. It is particularly optimized for modeling dynamic systems, making it an attractive language for an NRHES. Modelica has powerful libraries, such as Thermopower, that include the thermalhydraulic modeling tools required for modeling mass flows in energy systems \cite{Binder2014}. The language is well-maintained, giving it the added benefits of having up-to-date documentation and a community that can provide support. Typically, Modelica is run on the Dymola developer environment, a private tool developed by the creator of Modelica, Dr. Hilding Elmquist. Another option for running the Modelica language is the open source OpenModelica environment.
+A Modelica HES model developed in Binder et. al. (2014) includes a nuclear reactor, two steam cycles, a chemical plant, and an electrical component \cite{Binder2014}. The products of this Modelica NRHES model are synthetic fuel and electricity. The model includes the ramp up stage when the reactor initially starts or is increasing from a lower load. The steam generator connected to the NPP determines which of its turbines to use depending on electricity demand, the 60\% turbine, the 30\% turbine, or the 15\% turbine, which can be used in unison. A pressure relief valve releases excess energy unused by the turbines. The wind generation is modeled using the Western Wind dataset from the National Renewable Energy Laboratory (NREL) for an unspecified region in Idaho. Each component in the model was tested individually before being combined. Using the individual component models, verifications were made for the system as a whole. The startup transient state of the model took much greater computation time due to the complex interrelations of the components. Generally, running a model of a NRHES in Modelica requires a control algorithm, a differential equation that controls how the dynamic system allocates heat. The profitability control algorithm can be adjusted to incorporate varying parameters such as the price of electricity or the cost of natural gas. The study concluded that Modelica, due to its ability to evaluate control algorithms, is an effective tool for dynamically modeling a HES. As a tool that is optimized for large dynamic systems, Modelica has been used more than any other tool to model NRHES at this point.
 
-The Modelica HES model developed in Binder et. al. (2014) includes a nuclear reactor, two steam cycles, a chemical plant, and an electrical component \cite{Binder2014}. The products of this Modelica NRHES model are synthetic fuel and electricity. The model includes the ramp up stage when the reactor initially starts or increases from a lower load. The steam generator connected to the NPP determines which of its turbines to use depending on electricity demand, the 60\% turbine, the 30\% turbine, or the 15\% turbine, which can be used in unison if there is a high demand for electricity. A pressure relief valve releases excess energy unused by the turbines. The wind generation is modeled using the Western Wind dataset from the National Renewable Energy Laboratory (NREL) for an unspecified region in Idaho. Each component in the model was tested individually before being combined. Using the individual component models, verifications were made for the system as a whole. The startup transient state of the model took much greater computation time due to the complex interrelations of the components. Generally, to run a model of a NRHES in Modelica requires a control algorithm, a differential equation that controls how the dynamic system allocates heat. The profitability control algorithm can be adjusted to incorporate varying parameters such as the price of electricity or the cost of natural gas. The study concluded that Modelica is an effective tool for dynamically modeling a HES due to its ability to evaluate control algorithms.
+\subsubsection{RAVEN}
+The RAVEN tool was initially built for probabilistic risk assessment. RAVEN, as a probabilistic tool, can do parametric and stochastic analyses of systems\cite{RabitiRAVEN}. For the NRHES, RAVEN is used to run different wind energy generation paths in order to generate a statistically fair representation of how renewables, in this case wind power, would likely function over any given hour. RAVEN can be used to generate the most generic seasonal wind generation over a week. A typical week can be extrapolated to represent a given season. The process can be repeated over the different seasons, which can be extrapolated to represent a year. Using synthetic generated data instead of historic data avoids the critique that the model only represents past behavior and is thus inapplicable to future trends \cite{redfoot_epiney_2016}. RAVEN can also be used to determine high-risk time series samples to ensure that high risk scenarios are accounted for in the study. RAVEN can also do probabilistic assessments such as loss of load probability and sensitivity to uncertainty analysis.
+
+Any future modeling efforts for a NRHES would benefit from complimenting the ongoing modeling effort. Currently, all of the physics models for the NRHES are built in Modelica. To benefit from the work already done, any additional software would need to be able to easily communicate with the Modelica modeling language.  The model would benefit from a tool that would communicate with other chemical and utility standard physics modeling tools. Future work would benefit from coupling with other physics modeling tools, allowing groups to take advantage of the existing infrastructure while using their physics model of choice.
+
+\subsection{Distinct Capabilities}
+There are certain characteristics of a physical NRHES which a computational model would need to have to be a reasonable assessment of the system as a whole. Table I below demonstrates the functions which are most commonly incorporated in a model. We discuss dynamic modeling explicitly as it is the capability highly valued in a NRHES that is not nearly as important in a NFCS. The below discussion details the extensive work that has been done determining why a dynamic system is important to a NRHES.
+
+In Garcia et. al. (2013) and Du et. al. (2014), a dynamic approach to modeling hybrid energy systems (HES) is applied in order to appropriately address the impacts of flexible operation of the system due to variable renewable generation \cite{Garcia2013, Du2014}. In Du et. al. (2014), two optimization problems are addressed: the first minimizes variability in the HES through optimizing components of the HES system, and the second imposes operating and capital costs on the design variables. Garcia et. al. (2013) has a two-part series. The first applies and analyzes performance of a dynamic approach to modeling some of the physical components of a traditional and an advanced (produces goods besides electricity) HES. The second paper focuses on economic effects using a dynamic approach, as opposed to time series or statistical analysis. Overall, both parts of the series focus on how a dynamic approach better models the high level of variability of a HES for output generation and profitability maximization \cite{Garcia2013}. The costs of operating in a flexible manner, dynamically allocating resources between multiple coupled systems, are substantial enough to require a simulation that precisely models the variability of the system \cite{Garcia2013, Shropshire2011, Locatelli2015}. The dynamic modeling at this point focuses on the dynamic transfer of energy to different sources, and how this impacts the economics and grid reliability. The physical impacts of the grid system have not yet been included in the model \cite{Harrison2016}.  The dynamic allocation of the heat and electricity depending on the renewable generation and the grid demand is an essential characteristic of a NRHES.  Including factors such as how quickly the NRHES will be able to switch between providing energy to the industrial facility and the grid will impact determining the economic and physical values of the model.
 
 \section{Small Modular Reactors}
 For completeness, the use of small modular reactors both as tools for load following and as sources of process heat must be addressed. SMRs are generally defined as nuclear reactors under 300 MWe. SMR designs, such as the one in development by NuScale, combine multiple small reactor modules. Multiple SMRs in combination are a promising possibility for NRHES.  With multiple reactors, individual modules can be assigned to meet the industrial process energy demand, with others solely used for electricity generation. Furthermore, as electricity demand grows, additional modules can be added to the industrial park. Multiple SMRs have a clear means of load following, simply by shutting down those reactors whose energy output is not required due to seasonal shifts and other demand factors. The modularity of the SMRs allows greater flexibility in the design of the industrial park.  Locatelli (2015) discusses the technical and economic feasibility of load following using multiple small modular reactors (SMRs), applying the excess energy toward generating algae-biofuel and desalinated water \cite{Locatelli2015}. He discusses the benefits as well as drawbacks of an NRHES that includes a thermal desalination process. A desalination plant has the benefits of switching between a latent and producing state and generating a product that is readily stored. The main drawback is poor water quality and output level when the desalination unit restarts.
@@ -328,99 +331,12 @@ Table I displays the characteristics routinely described as necessary to model a
 \end{table}
 
 The table displays the characteristics that arise as a pattern in many of the documents.  The six characteristics included in the table are those likely necessary for a NRHES model.  Each of the characteristics has been included in previous studies, and thus has some already proposed approaches.  The characteristics can be studied in greater detail in order to determine if they satisfactorily model the system. A NFCS would need to find a way to appropriately include these characteristics.
-\section{Nuclear Fuel Cycle Simulators}
-The common uranium nuclear fuel cycle describes the system of mining uranium, converting the uranium to gaseous $UF_6,$ enriching the uranium with higher percentages of U235, fabricating the fuel, the fuel changing in the reactor, storing, reprocessing, and final disposal. There are different fuel cycles, depending on the type of fuel used, the reactors included, and how the spent fuel is managed. Nuclear fuel cycle simulators model the fuel cycle determining the likely quantity and characteristics of nuclear fuel in order to determine future policies surrounding management of the spent fuel.
-This section identifies basic properties of nuclear fuel cycle simulators and assesses their distinct functionality. Figures 1.3 and 1.4 display many of the currently used nuclear fuel cycle simulators (NFCS). The fuel cycle simulators are the central nodes in these figures, with the tools for computing some of the basic descriptive qualities of a fuel cycle branching off. The computational attributes that are often included in NFCS are: mass flows, reactor physics, thermal hydraulics, reprocessing, waste management, risk management, and economics. While different fuel cycle simulators were initially optimized for a variety of applications, there is a lot of overlap in their functionality \cite {Guerin2009}. Because nuclear fuel cycle simulators are attempting to model the same thing, the nuclear fuel cycle, the models include some means of tracking the isotopic makeup of the fuels as they move through the fuel cycle. The different fuel cycle simulators generally have the ability to simulate fleets of nuclear reactors with the associated fuel cycle industrial processes and nuclear materials storage. As can be seen in figures 1.3 and 1.4, there are a good number of NFCS, which all have different functionality and dependencies.
-%\begin{subfigures}
-\begin{figure*}
-\includegraphics[width=\textwidth]{US_FUEL_TOOLS.png}
-\caption{\small \sl This figure displays the nuclear fuel cycle simulators developed in the United States, though they are not necessarily specifically built to demonstrate the development of a US fuel cycle. This figure does not include all nuclear fuel cycle simulators or their dependencies.  The figure demonstrates some of the complexity of current Nuclear Fuel Cycle Simulator options. The figure demonstrates the types of tools NFCSs depend on, thereby suggesting some of their functionality.}
-\end{figure*}
-
-\begin{figure*}
-\includegraphics[width=\textwidth]{Non-US_FUEL_TOOLS.png}
-\caption{\small \sl This figure displays the nuclear fuel cycle simulators developed outside of the United States. The full relationship between the various computational tools may not be covered.}
-\end{figure*}
-%\end{subfigures}
-In the case of the once-through fuel cycle, uranium is mined, enriched for a higher concentration of U-235, molded into fuel assemblies, and used in a nuclear reactor for between 36 and 72 months. The spent fuel is not reprocessed, so it is first stored on site in spent fuel pools, then canisters. Eventually, the spent fuel will be deposited in a deep geologic repository. More advanced fuel cycles involve different degrees and methods of used fuel reprocessing. Nuclear fuel cycle simulators permit modeling of new techniques applied to all parts of the nuclear fuel cycle; from the mining through the waste management. The idea behind modeling the full nuclear fuel cycle is to optimize the fuel cycle given technical, environmental, regulatory, and economic constraints.
-
-Prof. Paul P. H. Wilson reported for the Blue Ribbon Commission on America's Nuclear Future "Comparing Nuclear Fuel Cycle Options" discusses, at a high level, different nuclear fuel cycle simulators' performance for a once-through system, a limited recycling option, as well as continuous recycling. Prof. Wilson describes nuclear fuel cycle simulators as focusing "on understanding mass flows and facility deployments under alternative civilian nuclear fuel cycles, particularly during transitions between fuel cycles." The two uses for a NFCS as stated in the report are to make informed policy decisions and to determine more fine-grained technical decisions about what technologies to pursue. Prof. Wilson breaks down some of the assumptions either explicitly or implicitly included in the nuclear fuel cycle simulators, including:
-\begin{itemize}
-\item "Growth rate of nuclear electricity,
-\item Date of introduction of new technologies and facilities,
-\item Constraints on spent fuel interim storage capacity,
-\item Constraints on spent fuel storage/cooling times,
-\item Constraints on quantity of separated plutonium,
-\item Relative priority of different fuel cycle paths, and
-\item Supply vs. demand flow control at each fuel cycle stage."
-\end{itemize}
-
-Prof. Wilson explains that a degree of uncertainty present in each of the assumptions introduces even greater variability. NFCS differ both in how they calculate their FOMs as well as in how the FOMs are presented. Benchmarks for NFCSs often entail summaries for each fuel cycle simulator by the authors of the tool \cite{Guerin2009}. Making comparisons of various tools is difficult because most of the tools are proprietary. As a result, the reports of the developers are the main access to understanding the tool rather than using a controlled end user. Different authors choose to discuss different aspects of the NFCS, adding to the difficulty of comparing the various NFCS. Even when two NFCSs have similar functionality, it can be hard to make comparisons based on benchmark reports due to different emphases in the reports describing the tools. This variability leads to model development with built-in biases that weigh certain characteristics of a technology as more important, thereby skewing the results.
-
-Due to the uncertainties, NFCSs are best used as comparative tools, as opposed to predicting absolute values \cite{Wilson2012}. Given different constraints within an NFCS, it can demonstrate the relative differences between the two simulations better than the absolute nature of either one. The strength of relative comparisons is especially clear in economic analyses, where prices and how they are likely to change over time are unpredictable. The simulator, if built well, would be able to show which model would be cheaper, but not exact prices\cite{Wilson2012}. Some of the uncertainty concerns surrounding simulating a nuclear fuel cycle as stated by Prof. Wilson:
-
-\begin{itemize}
-\item Cost of water
-\item Uranium consumption and costs
-\item Total land use
-\item Waste disposal space
-\item Localized variations of the estimated peak dose rate
-\item Radiotoxicity of waste streams
-\item Radioactive liquid and gaseous release volumes
-\item Conventional pollutant release over the lifecycle of the nuclear system
-\item Required Enrichment of the fuel
-\item Attractiveness of separated materials for proliferation of nuclear weapons
-\item Difficulties in siting a nuclear power plant, and
-\item Variation in how metrics are calculated.
-\end{itemize}
-
-Many of the above listed characteristics are region-specific capital, operations, and maintenance costs that would also apply to NRHES.  In order to include these characteristics for both the nuclear fuel cycle and NRHES, some measures of uncertainty would need to account for the variability of circumstances. Wilson breaks down the uncertainties into the categories of cost, safety, resource utilization, sustainability, and non-proliferation ~\cite {Wilson2012}.
-
-The major difference between many of these nuclear fuel cycle simulators is the ability to model discrete facilities and fuel batches versus modeling continuous mass flows throughout the fleet of facilities operating in an identical fashion. In the case of the fleet modeling, the average value for each of the facilities is assumed. The discrete model requires more information, such as the fuel composition for each type of reactor included in the simulation, while providing a more detailed analysis. As a result, the discrete model is more computationally complex and expensive.
-
-In "Modeling the Nuclear Fuel Cycle," Juchau et al. (2010) describe four functions as necessary for a NFCS to meet the desired qualities of a proposed organization called the Simulation Institute for Nuclear Enterprise Modeling and Analysis \cite{Juchau2010}. The four functions, which reiterate the characteristics described by Prof. Wilson, include:
-
-\begin{itemize}
-\item "Characterize and deploy individual fuel cycle facilities and reactors in a simulation while discretely tracking material movements,
-\item The capability to perform an uncertainty analysis for each element of the fuel cycle and an aggregate uncertainty analysis,
-\item Inclusion of an optimization engine able to optimize simultaneously across multiple objective functions, and
-\item Open and accessible code software and documentation to aid in collaboration between multiple entities and to facilitate software updates."
-\end{itemize}
-
-Juchau (2010) reviews the nuclear fuel cycle simulator tools CAFCA, COSI, CEPMNFC, DANESS, NFCSim, VEGAS, VISION, NFCSS, and GENIUS 1. His conclusion is that many of these tools have overlapping functionalities, partly due to the proprietary nature of at least components of each. One reason why there are so many nuclear fuel cycle simulators is that many of the countries that currently have NPPs have designed their own simulators. Figure 3 depicts the non-US NFCSs along with some of their software dependencies. Most of the fuel cycle simulators are not open source or available for download; thus, each nation tends to have proprietary software. As discussed with Prof. Kathryn D. Huff, it is also often more efficient, both in terms of time spent as well as better integration, if the different functions are designed by the same team \cite{redfoot_huff_2016}. Integrating components, such as a burnup calculation, from one system into a new system can often be more challenging than building the function from scratch. While sharing code can be challenging among various programs, some calculations or libraries are commonly used by NFCSs. For example, Figure 3 depicts EVOLCODE, FUTURE, and FAMILY21 as all relying on Origen.
-\chapter{Methodology of Modeling a NRHES with a NFCS}
-The underlying structure of passing materials between various facilities is similar enough between nuclear materials in a fuel cycle and heat or electricity flow in a nuclear hybrid energy system that a nuclear fuel cycle simulator could theoretically model a nuclear renewable hybrid energy system. In the case of a NRHES model, the facilities are the NPP, the renewable, and the industrial process at least.  In the case of the nuclear fuel cycle, the facilities are the steps in the given fuel cycle. Both systems are time dependent and include uncertainty measures. Many of the uncertainty measures found in NFCS are the same for NRHES including O\&M costs, water costs, and challenges in siting a nuclear power plant. The uncertainties can be accounted for using sensitivity analyses. Optimally, both systems would be:
-\begin{itemize}
-
-\item flexible so that new component models and specific regional characteristics could easily be added,
-\item open source so that researchers can use the tools instead of rebuilding already available tools, and
-\item usable by technical and non technical people alike to address policy decisions.
-\end{itemize}
-
-A NFCS must be able to reasonably model the dynamic nature of NRHES. The dynamic aspects of concern are how the energy would switch between different loads as well as the ramping of various generation components.  The length of the simulations and time step are vastly different between NRHES and the fuel cycle. The nuclear fuel cycle does not require the quantities to be exchanged nearly as regularly as a nuclear hybrid energy system and with as inconsistent of quantities. While the fuel cycle may be run with a monthly time step and the same resource amount is exchanged at each time step, a NRHES requires a variable amount of resource to be exchanged on an hourly or minute-to-minute scale. The dynamic impacts on the physical system must be included in order to generate a meaningful model of a NRHES. The stochastic aspect of the renewables components of a NRHES also requires either external coupling with a tool able to model randomness such as RAVEN or the use of real time data from a specific region. The dynamic and stochastic components of modeling a nuclear hybrid energy system require some work to incorporate.
-
-Many of the features commonly found in a NFCS would not be needed in a NRHES model.  There would be no need to model a fleet of NRHES at this point in development, so a system would have to be able to model discreet facilities.  The reactor calculations, such as burnup, would not be needed for a NRHES.  The back end of the fuel cycle, such as models for reprocessing and long term waste storage would also not be applicable at this point to a NRHES model.  The primary qualities that would be used are optimization methods, economic evaluation, and means of exchanging materials in a system.
-
-The nuclear fuel cycle shares similar enough underlying characteristics with a nuclear hybrid energy system to loosely model the system.  A more thorough analysis of the benefits and challenges to using a NFCS to model NRHES will be discussed surrounding the model. A NFCS that is in a mature state of development, open source, easy to incorporate new components, flexible enough to change the materials exchanged rapidly, and able to be coupled with external tools for modeling the renewable resource could speed up the development of a NRHES model. Cyclus is the only currently open source nuclear fuel cycle simulator.  As such, Cyclus has distinct advantages among the NFCSs when developing an NRHES.
-
-
-The flexibility and modular design of Cyclus suggest its potential to successfully model a NRHES. The Cyclus fuel cycle simulator's underlying system is the dynamic resource exchange (DRE) \cite{Huff2016}.  The DRE has a set time step at which point certain facilities will put their resources on the market for exchange while other facilities can make a bid for the desired amount of the resource. For example, in the case of modeling the nuclear fuel cycle, the reactor could declare how much spent fuel it has once every eighteen months.  A reprocessing facility and a long-term geologic repository could both bid on how much of the spent fuel each facility could take at that point.  The DRE has a built in functionality of preferences for allocating a resource.  For the example given, a preference could be a built in for the reprocessing facility, meeting the bid from this facility before sending the remaining spent fuel resource to the long-term geologic repository. The simulation could be run over hundreds of years to demonstrate the accumulation of spent fuel and fission products over the entire timeline.
-
-The NRHES model built in Cyclus will determine whether the DRE is sufficiently flexible to model other systems besides the nuclear fuel cycle.  In the case of a NRHES, the DRE would be passing the electricity or heat to the various facilities.  For example, the reactor could  pass heat to the industrial process at a time step of one hour or one minute and send electricity to the grid.  The renewable would pass electricity to the grid when generating.  The grid would make a bid every time step for how much electricity is demanded.  The industrial process would also make a bid for the heat and/or electricity required.  The built in preferences functionality in Cyclus could be used to ensure the resource is sent to the facility willing to pay the highest price for the resource.  Thus, the electricity or heat could be sent to the industrial process when the product created with that energy is worth more than the current value of electricity on the grid.
-\chapter{Thermal Versus Electrical Coupling}
-From the literature review on NRHES, a notable gap in the current research is modeling the benefits gained from thermally coupling systems as compared to electrically coupling.  The efficiency benefits would have to be greater than the costs associated with co-location.  Cyclus's ability to dispatch resources could allow for a comparison between coupling an industrial process thermally or electrically. The Cyclus model developed for this research will be used to compare a system that exclusively produces electricity, but varies in the amount of electricity sent to the industrial process, with a system which sends process heat directly from the reactor to the industrial process as well as sending electricity to the grid.
-
-Energy efficiency is often characterized as using less energy to perform the same tasks.
-
-Ways that thermal coupling can increase efficiency of industrial processes:
-\begin{itemize}
-\item Desalination - pre heating for an RO plant, direct heating for MED and MSF plants
-\end{itemize}
-
 
 \chapter{Figures of Merit}
-To determine the performance of an electrically coupled versus a thermally coupled NRHES with the Cyclus model, clear performance criteria must be established.  While economic figures of merit must be evaluated for a NRHES, other benefits of the system such as grid reliability and safety of the system should also be considered. This section of the thesis details the current efforts at establishing a figure of merit to analyze a NRHES and suggests two approaches to future assessment, Analytic Hierarchy Process (AHP) and a dimensional analysis approach.
+To determine the performance of an electrically coupled versus a thermally coupled NRHES, clear performance criteria must be established.  While economic figures of merit must be evaluated for a NRHES, other benefits of the system such as grid reliability and safety of the system should also be considered. This section of the thesis details the current efforts at establishing a figure of merit to analyze a NRHES and suggests two approaches to future assessment, Analytic Hierarchy Process (AHP) and a dimensional analysis approach.
 \section{Economic Figures of Merit}
+
+
 \subsection{Levelized Cost of Electricity}
 The levelized cost of electricity (LCOE) is the typical FOM for comparing the profitability of different generating sources, such as nuclear, fossil fuels, and renewables. The LCOE is mathematically defined as the costs of a power-generation source divided by the total energy output, with units of \$/unit of energy. The LCOE is easiest to think about as the lowest average amount of money a project can sell the electricity generated for over in order to break even, or for the Net Present Value (discussed below) to equal zero. The LCOE is a ubiquitous metric used for evaluating energy generation sources, but it is not always calculated the same way.  The two equations below illustrate very different means of calculating a figure bearing the same name.  While a lack of clarity about what is meant by LCOE can be mitigated by defining the means of calculating the value, this practice is often overlooked.
 Ted Baker, in Analysis of Nuclear Hybrid Energy Systems with Battery Storage Using Levelized Cost of Electricity, evaluated the effectiveness of the levelized cost of electricity (LCOE) for a hybrid system \cite{Baker2016}. His analysis found the LCOE was incapable of fully capturing the benefits of energy storage associated with a NRHES and did not including all revenue streams.  Baker defines the utilization as energy used divided by the total possible generation. In order to normalize the LCOE, the calculated LCOE shown in equation 1 below is multiplied by the total energy actually used for each source.  As Baker describes, to normalize the LCOEs "the sum of all specific LCOEs is then divided by the sum of the demand data. This weights each source by its contribution to coverage (pg. 20)."  The revenue rate of the secondary product in \$/MWh is subtracted from the total LCOE in order to find the net LCOE.  Baker concludes that the LCOE is ineffective for the revenue stream of a secondary product and includes errors for variable generation and battery storage. Baker recommends exploring more advanced LCOE and Levelized Cost of Storage (LCS) calculations. The LCS focuses on comparing the costs between various energy storage sources optimizing for different use cases \cite{Tyskiewiczd}.
@@ -432,15 +348,6 @@ Net Present Value (NPV) is generally considered to be the present value of a sys
 \section{Grid Reliability}
 A hybrid energy system in general has not only a goal of profitability, but to ensure a reliable source of energy, especially from a system that includes fluctuating sources of energy. The system would, therefore, benefit from an evaluation of the reliability of the energy generated as well as an economic evaluation.
 \subsection{Loss of Load Probability (LOLP)}
-Two figures of merit used by electric power utilities are the System Average Interruption Duration Index (SAIDI) and the System Average Interruption Frequency Index (SAIFI).
-
-\begin{equation*}
-SAIFI =\frac{total\hspace{.15 cm} number\hspace{.15 cm} of\hspace{.15 cm} customer\hspace{.15 cm} interruptions}{total\hspace{.15 cm} number\hspace{.15 cm} of\hspace{.15 cm} customers\hspace{.15 cm} served}\,.
-\end{equation*}
-
-\begin{equation*}
-SAIDI = \frac{sum \hspace{.15 cm} of \hspace{.15 cm}all \hspace{.15 cm}customer\hspace{.15 cm}interruption \hspace{.15 cm} durations}{total\hspace{.15 cm}number\hspace{.15 cm}of\hspace{.15 cm}customers\hspace{.15 cm}served}
-\end{equation*}
 
 The loss of load probability (LOLP), is "a measure of the probability that a system demand will exceed capacity during a given period; often expressed as the estimated number of days over a long period, frequently 10 years or the life of the system" \cite{Electromn}. The LOLP was originally introduced in 1947 by Giuseppe Calabrese and has since become a standard grid reliability metric \cite{calabrese1947generating}. The LOLP can be mathematically shown, as described in Hattab et. al. (2015), as \cite{Hattab2015}:
 \begin{equation*}
@@ -452,8 +359,20 @@ Where P(j)*t(j) is the contribution that a particular outage of some magnitude O
 One major goal of a NRHES is to minimize the number of days that the system cannot meet the grid demand.  With fossil fuels, nuclear, and renewables all contributing, along with a battery, considerable backup ensures that grid demand is met. For a NRHES, two LOLPs must be generated; one for meeting the electricity demand from the grid and one for meeting the energy needs of the industrial process.  If the industrial process intends to fluctuate its output along with the energy generated from renewable and the grid demand, the losses from the industrial process will need to be taken into consideration for grid reliability. In order to fairly evaluate the benefits of an NRHES, metrics describing the system need to include a grid reliability component.
 Eventually, the goal is to determine a figure of merit that is able to incorporate grid reliability and profitability metrics.  The profitability metrics will include the materials replacement rates for different reactor types, industrial processes, and heat transport mechanisms. Future work will include emissions in the FOM. Since at this point, standard figures of merit have not been established for NRHES, this research will work to determine some combination to evaluate the systems.
 
+\subsection{Industry Standards for Grid Reliability}
+Two figures of merit used by electric power utilities are the System Average Interruption Duration Index (SAIDI) and the System Average Interruption Frequency Index (SAIFI).
 
-Here ends what I will send for a review to my committee.
+\begin{equation*}
+SAIFI =\frac{total\hspace{.15 cm} number\hspace{.15 cm} of\hspace{.15 cm} customer\hspace{.15 cm} interruptions}{total\hspace{.15 cm} number\hspace{.15 cm} of\hspace{.15 cm} customers\hspace{.15 cm} served}\,.
+\end{equation*}
+
+\begin{equation*}
+SAIDI = \frac{sum \hspace{.15 cm} of \hspace{.15 cm}all \hspace{.15 cm}customer\hspace{.15 cm}interruption \hspace{.15 cm} durations}{total\hspace{.15 cm}number\hspace{.15 cm}of\hspace{.15 cm}customers\hspace{.15 cm}served}
+\end{equation*}
+
+\section{Levelized Cost of Feedstocks}
+
+%Here ends what I will send for a review to my committee.
 
 \chapter{Applying Risk Assessment Techniques to NRHES}
 Identifying likely failures is an important aspect of safe and secure operation of any large infrastructure. For a NRHES, a large piece of infrastructure that has as of yet to be built, a design that addresses likely failures ensures long term safe, reliable, and profitable operation.   In order to examine the impacts of a nuclear renewable hybrid energy system, this chapter will evaluate the economic, grid reliability, and physical risks of failures in the coupling of a nuclear power plant to an industrial process which functions in a dynamic fashion. The dynamic nature of the heat allocation in a nuclear hybrid energy system results in uncertainties both in the reliability of the energy demanded by the grid as well as that demanded by the industrial process. The focus of this section is to develop a means of comparing various NRHES configurations to determine which NRHES configuration will be used in the Cyclus model.
@@ -478,23 +397,399 @@ As was done in Falcone et. al. in establishing a new approach to risk assessment
 \item Document Any safety features that are to be implemented during the design and development phase"
 \end{itemize}
 This analysis will seek to address the above requirements from an economic, grid reliability, and physical safety perspective of a NRHES. Due to lack of expertise in either the economic or possible physical failures of a NRHES, this analysis is not exhaustive but will hopefully address some of the more obvious concerns. The PHA will need to be added upon as research continues and hazards are determined.
-	In order to perform a PHA requires classifying the hazard level and frequency associated with each event. The hazard classes for this PHA range from Negligible to Catastrophic. A Class I hazard has negligible negative outcomes, a Class II hazard has marginal effects, a Class III hazard has critical impacts, and a Class IV hazard has catastrophic impacts (Ostrom et. al., 2012).  The frequency of occurrence, since this system has yet to have a physical demonstration, will be qualitative and an intellectual exercise as the values cannot be verified at this point.
+	In order to perform a PHA requires classifying the hazard level and frequency associated with each event. The hazard classes for this PHA range from Negligible to Catastrophic. A Class I hazard has negligible negative outcomes, a Class II hazard has marginal effects, a Class III hazard has critical impacts, and a Class IV hazard has catastrophic impacts (Ostrom).  The frequency of occurrence, since this system has yet to have a physical demonstration, will be qualitative and an intellectual exercise as the values cannot be verified at this point.
 
-\section{Economic PHA}
+\begin{landscape}
+\subsection{Economic PHA}
+\begin{table}[h!]
+\centering
+\caption{Economic Preliminary Hazard Analysis}
+\label{my-label}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Potential \\ Failure\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Event Causing\\ Hazardous\\ Condition\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Hazardous\\ Condition\end{tabular}}  & \textbf{Hazard Class} & \textbf{\begin{tabular}[c]{@{}l@{}}Preventative \\ Measure\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Qualitative\\ Likelihood\end{tabular}} \\
+\hline
+\begin{tabular}[c]{@{}l@{}}Industrial process\\ is not profitable \end{tabular}      & \begin{tabular}[c]{@{}l@{}}If the industrial\\ process has to be\\ ready to take load\\ from the grid, it \\ will likely be running\\ below capacity and \\ may not be profitable\end{tabular}      & \begin{tabular}[c]{@{}l@{}}Industrial \\ process loosing\\ money\end{tabular} & \begin{tabular}[c]{@{}l@{}}Class III,\\ the benefit of\\ the NRHES \\ would be lost\\ without a means\\ of having the \\ industrial process\\ prepared to take \\ heat. \end{tabular}    & \begin{tabular}[c]{@{}l@{}}Contracts \\ ensuring\\ a certain profit\\ for the industrial\\ process to be \\ prepared to \\ take heat from\\ the Nuclear\\ Power Plant\end{tabular} & Likely \\
+\hline
+\begin{tabular}[c]{@{}l@{}}Nuclear regulations \\ could apply to the\\ whole system, \\ increasing the costs\\ of the system\end{tabular} & \begin{tabular}[c]{@{}l@{}}Since the \\ components will \\ be co-located \& \\ coupled, the NRC \\ may have\\ jurisdiction \\ over the whole system\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Additional \\ regulations \\ on the industrial \\ process could \\ result in greater\\ costs\end{tabular} & \begin{tabular}[c]{@{}l@{}}Class III: without an \\ industrial process\\ the whole NRHES \\ would be undermined.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Determine regulatory \\ oversight before \\ beginning \\ construction\end{tabular} & \begin{tabular}[c]{@{}l@{}}Fairly Likely\\ as the other\\ components\\ would be\\ within the\\ required \\ boundary \\ around the NPP\end{tabular} \\
+\hline
+Feedstock costs rising & \begin{tabular}[c]{@{}l@{}}Any of the feedstocks\\  could rise in price for \\ any number of reasons. \\ Rise in price during \\ the operation of the \\ system could result in \\ the product prices no \\ longer being\\ competitive\end{tabular} & \begin{tabular}[c]{@{}l@{}}Feedstocks rising in \\ price during the \\ operation of the system \\ could\\ result in the \\ product prices no \\ longer being \\ competitive\end{tabular} & \begin{tabular}[c]{@{}l@{}}Class I: shifts \\ already occur in\\ feed stock prices and\\ are systems adjust.\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Include long term \\ projections for the \\ feedstock costs of \\ the various \\ components in the \\ design phase of the \\ NRHES\end{tabular}                      & \begin{tabular}[c]{@{}l@{}}Likely there \\ will be \\ fluctuations.\\ Depends on the \\ feedstock\end{tabular}\\
+\hline
+Product value decreasing & \begin{tabular}[c]{@{}l@{}}There could be a \\ change in \\ conditions or a \\ new technology \\ that makes the \\ industrial process \\ product value \\ decrease\end{tabular} & \begin{tabular}[c]{@{}l@{}}For each of the products,\\ the reason would be \\ different. Desal: a \\ drought could end\\ Syn fuel: oil prices \\ could decrease\\ Hydrogen: Less \\ energy\\ intensive \\ process could be \\ invented\end{tabular} & \begin{tabular}[c]{@{}l@{}}Class II: the industrial \\ process would need\\ to be further subsidized\\ by other components \\ to continue to run\end{tabular}& \begin{tabular}[c]{@{}l@{}}Do long term \\ economic \\ analysis of the \\ industrial \\ process. Pick \\ a product \\ or location where\\ the product will \\ clearly be in demand\end{tabular} & \begin{tabular}[c]{@{}l@{}}Possible: The \\ product value \\ will likely \\ fluctuate over \\ the length of \\ the\\ project\end{tabular}          \\ \hline
+\end{tabular}
+\end{table}                                                           \end{landscape}
 
-\section{Grid Reliability PHA}
+\begin{landscape}
+\subsection{Grid Reliability PHA}
+\begin{table}[h!]
+\centering
+\caption{Grid Reliability Preliminary Hazard Analysis}
+\label{my-label}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Potential \\ Failure\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Event Causing\\ Hazardous\\ Condition\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Hazardous\\ Condition\end{tabular}} & \textbf{Hazard Class} & \textbf{\begin{tabular}[c]{@{}l@{}}Preventative \\ Measure\end{tabular}}  & \textbf{\begin{tabular}[c]{@{}l@{}}Qualitative\\ Likelihood\end{tabular}} \\
+\hline
+\begin{tabular}[c]{@{}l@{}}Nuclear Power \\ Plant Outage\end{tabular}  & \begin{tabular}[c]{@{}l@{}}The NPP needs \\ to be refueled\end{tabular} & \begin{tabular}[c]{@{}l@{}}NPP down for \\ refueling\end{tabular} & \begin{tabular}[c]{@{}l@{}}Class I: This will \\ be a routine issue. \\ The industrial \\ process will need \\ to stop during the \\ outage and the \\ grid will need to \\ get electricity \\ from peaker\\ plants\end{tabular} & \begin{tabular}[c]{@{}l@{}}Plan ahead with the \\ industrial process \\ so that it can either \\ get\\ electricity from\\ the grid or be \\ paid to close for \\ the outage.\end{tabular}                                     & \begin{tabular}[c]{@{}l@{}}Certain: an \\ NPP needs to \\ be refueled\end{tabular} \\
+\hline
+\begin{tabular}[c]{@{}l@{}}System not able \\ to quickly shift\\  heat from \\ industrial process \\ to\\ electricity \\ generation\end{tabular} & \begin{tabular}[c]{@{}l@{}}The NPP heat \\ transport system \\ taking a while to \\ shift.\end{tabular} & \begin{tabular}[c]{@{}l@{}}The NRHES is \\ briefly unable \\ to meet \\ the grid demand\end{tabular} & \begin{tabular}[c]{@{}l@{}}Class II: There \\ would be some \\ money loss as \\ some other \\ electricity \\ generation system \\ would supply the \\ demanded energy \\ during the transition \\ period\end{tabular}            & \begin{tabular}[c]{@{}l@{}}Include the time it \\ takes to allocate \\ heat in models of \\ the NRHES to \\ determine how \\ much of a limiting \\ factor it is likely to be.\\ Include a battery in\\ the NRHES\end{tabular} & Likely \\                       \hline
+\end{tabular}
+\end{table}
+\end{landscape}
 
-\section{Physical PHA}
+
+
+\begin{landscape}
+\subsection{Physical PHA}
+\begin{table}[h!]
+\centering
+\caption{Physical Preliminary Hazards Analysis}
+\label{my-label}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Potential \\ Failure\end{tabular}}                        & \textbf{\begin{tabular}[c]{@{}l@{}}Event Causing\\ Hazardous\\ Condition\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Hazardous\\ Condition\end{tabular}} & \textbf{Hazard Class} & \textbf{\begin{tabular}[c]{@{}l@{}}Preventative \\ Measure\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Qualitative\\ Likelihood\end{tabular}}                 \\
+\hline
+\begin{tabular}[c]{@{}l@{}}Materials failure \\ in the heat \\ transport system\end{tabular} & \begin{tabular}[c]{@{}l@{}}NRHES are very \\ dynamic systems. \\ There will likely \\ be greater materials \\ wear due to the \\ dynamisticity of \\ the system\end{tabular} & \begin{tabular}[c]{@{}l@{}}Heat transport \\ pipe forms a leak\end{tabular}            & \begin{tabular}[c]{@{}l@{}}Class III:There \\ would be a loss \\ of\\ money due \\ to the shutdown \\ of the system\end{tabular}                                                                                                          & \begin{tabular}[c]{@{}l@{}}Reliable maintenance \\ \& appropriate choice \\ of heat transport \\ system\\ materials\end{tabular} & Possible                                                                                  \\
+\hline
+Release of Radionuclides                                                                     & \begin{tabular}[c]{@{}l@{}}A lot of things \\ would need to \\ go awry\end{tabular}                                                                                          & \begin{tabular}[c]{@{}l@{}}A large release \\ of airborne\\ radionuclides\end{tabular} & \begin{tabular}[c]{@{}l@{}}Class IV: A \\ radiation release \\ that could \\ potentially impact \\ human health \\ would have\\ massive negative \\ impacts for the \\ nuclear industry \& \\ would shut down \\ the\\ NRHES\end{tabular} & \begin{tabular}[c]{@{}l@{}}Passive safety \\ systems, excellent \\ safety culture, \\ good reactor design\end{tabular}           & \begin{tabular}[c]{@{}l@{}}Unlikely: Based \\ on history of \\ NPP operation\end{tabular} \\
+\hline
+\end{tabular}
+\end{table}
+\end{landscape}
 
 \section{Analytic Hierarchy Process (AHP)}
 Analytic hierarchy process (AHP) is a decision analysis method, a means of comparing various options, based on multiple attributes. For this research, the same NRHES with only the industrial process switched out will be compared. As mentioned before, the three industrial processes being compared for this research are desalination, hydrogen production, and synthetic fuel production. The AHP includes comparing each of the potential options on suboptions. In this case the three industrial processes to potentially be included in the NRHES will be compared based off of economics, grid reliability, and physical safety. These subcomponents can be easily analyzed, thus the AHP provides not only insight into which is the best overall choice given the inputs and weights, but also which is the strongest candidate for each of the components. The AHP is especially applicable at this point in the development of the NRHES due to the relative values of physical safety for example for a desalination plant as compared to a synthetic fuel plant can only be based upon expert judgement. The AHP measures the consistency of the values used to compare the different options using a consistency ratio, which needs to be less than .1, or 10\%, in order to be considered consistent.
 The focus for the AHP conducted in this research is on the process of comparing different industrial processes for an NRHES, not on the actual values. In order to find the relative values of the value of 1 MWth for a desalination system versus a synthetic fuel system, for example, would require finding the optimal size of each of the industrial processes for the NRHES and the total costs associated with the process.  Baker, 2016  included calculations for sizing a reverse osmosis desalination plant, capital costs, and O\&M costs.  Baker converted the values of selling the desalinated water from \$/kgal to \$/kWh in order to evaluate the value of the electricity used to generate the product. Future work for determining the optimal industrial process will include undergoing a similar process for hydrogen and synthetic fuel production in order to have appropriate values to input into the AHP.  The tables shown below display the relative values for each of the characteristics considered in the AHP. The values are chosen on a scale of one to five, with the industrial process strongly reflecting that characteristic receiving a five and the characteristic relatively less reflecting those characteristics receiving appropriate smaller numbers. As current research on NRHES focuses on the economic feasibility of the system, economics will be the most strongly weighted at 62.5\% with grid reliability weighted at 25\% and safety at 12.5\%.  While the safety of the system is in reality the most important characteristic, as it is the foundation which the economic and grid reliability characteristics rely on, the safety issues are the most easy to mitigate and the most well known. Safety is also included in the economic and grid reliability metrics. The weights associated with each of the characteristics were found through the numbers associated with the relative priorities from Table 9.
 
 \section{AHP Expert Survey Methodology}
-The results from the AHP Expert survey will determine which industrial process is modeled in the Cyclus model.
+\section{Background}
+Risk assessment is a means of analyzing complex systems for hazards. Risk assessment tools often model many variables in large systems and attempt to format them into an easy-to-understand table or number to facilitate comparisons. Risk assessment techniques often evaluate competing systems by evaluating characteristics which need to be considered simultaneously. Examples of some risk assessment approaches include: probabilistic risk assessment, fault tree analysis, and failure mode and effects analysis.
+
+The ability to model potential failure modes for a complex system nicely fits the requirements for a comparison of various NRHES industrial park configurations. The definition of industrial park comes from the field of industrial ecosystems. In "Industrial Parks as Ecosystems", Cote et. al. describes industrial parks as "a diverse assembly of businesses, with built-in resilience. The design of the park would encourage mutualistic and commensalistic relationships in order to make maximum use of inputs, products and waste materials \cite{Cote1995}." In the case of a NRHES, the heat coming off of the reactor, the land (including the land which simultaneously houses the renewables as well as the evacuation zone around the nuclear plant), and the electricity generated are all to be evaluated to maximize economic profitability. Since a physical model of a NRHES does not yet exist, now is the appropriate time to assess risks in order to incorporate mitigating measures in the industrial park design. Incorporating risk management in the design of a facility minimizes the costs and dangers associated with the system in the long run. The earlier risk mitigation can be incorporated into a design, the more likely final construction will be both physically safe and economically viable.
+
+When determining an appropriate electricity generation source for a given region, it is important to incorporate criteria to judge the various options on such as economic viability, emissions, flexibility, and reliability. Economic viability means the system is profitable, or likely to be profitable, overall.  Emissions refers to both release of materials which can directly effect human health as well as greenhouse gases which impact climate change. Power system flexibility, as defined by EPRI, is "the ability to adapt to dynamic and changing conditions \cite{EPRI2016}." While reliability generally focuses on the ability of a power source to operate in normal and abnormal conditions \cite{NERC2018}.   Quantifying the above criterion is especially difficult for a given NRHES, because it supplies both electricity to the grid as well as energy for a secondary industrial product. Generally, the characteristics valued in a NRHES are a more economically robust system that emits less and is reliable and flexible.
+
+\section{Analytic Hierarchy Process}
+Analytic Hierarchy Process(AHP) is a risk assessment tool used to do pairwise comparisons of various potential options depending on a set of predetermined characteristics. Originally developed in the 1970s by Thomas L. Saaty, Analytic Hierarchy Process (AHP) has been applied to everything from determining the appropriate bridge construction \cite{Pan2008}, to determining the appropriate energy make-up of Turkey\cite{Kahraman2010} \cite{Saaty1987}. AHP is a multicriteria decision-making tool. There is a wealth of research applying multicriteria decision-making tools to energy planning. Pohekar et. al. reviewed more than 90 published papers on multi-criteria decision making and energy planning \cite{Pohekar2004}. Pohekar et. al. found AHP to be the most popular multicriteria decision-making technique used in energy planning. The reasons for the prevalence of AHP in energy planning, Pohekar et. al. suggests, is due to its' ability to:
+\begin{quote}
+	"convert a complex problem into a simple hierarchy, flexibility, intuitive appeal, its ability to mix qualitative as well as quantitative criteria in the same decision framework and use of computational aids leading to successful decisions in many domains."
+ \end{quote}
+Some of the previous applications of AHP to energy systems noted in Pohekar et. al. include Akash et. al.  1999; and Ramanathan et. al. 1995. Akash et. al. uses AHP to analyze the selection of power plants in Jordan \cite{Akash1999}.  Ramanathan et. al. applies AHP at a household level in India.  The goal of the AHP is to determine which energy resources work best for various tasks in the home such as heating, water pumping, lighting, and household appliances \cite{Ramanathan1995}.
+
+The general process for applying AHP involves initially determining a set of alternatives and a set of criteria on which to compare the alternatives. To achieve a hierarchy, we structured the objective above the criteria, which is then structured above the alternatives, as can be seen in figure 1 below. To find the relative value of one of the alternatives over the other, make a series of pairwise comparisons creating a ratio scale.  Generally AHP is done on a scale of one to nine. After creating the ratio scale, apply an eigenvalue method to include the relative weights of each of the criteria to each of  the elements. Finally, include the relative weights in the ratio combining to form one measurement to compare the various elements.
+
+% > To achieve a hierarchy, we structured the objective above the criteria, which is then structured above the alternatives, as can be seen in figure 1 below.
+% You may want to move figure 1 up closer to here.  Or maybe just make a general figure.
+%
+% ^.
+
+The AHP provides not only insight into which is the best overall choice given the inputs and weights, but also which is the strongest candidate for each of the criterion. During the AHP process, before aggregating the values into one measurement, there are clear measurements of each of the alternatives in each of the criterion. While expert judgment is particularly important at this stage in designing and developing optimal NRHES, the subjective nature of expert judgment as data requires a means of evaluation. As a check on the validity of the data, the AHP measures the consistency of the values given by the experts using a Consistency Ratio, which needs to be less than .1, or 10\%, in order to be considered consistent. The Consistency Ratio compares the randomness of the expert judgments to a Random Consistency Index \cite{Saaty1987}.  If the consistency ratio is greater than .1, the data is judged to be too close to random to be considered telling.
+
+
+\section{Fuzzy AHP}
+Fuzzy logic applied to AHP takes into consideration the uncertainty inherent in a small number of expert opinions. Fuzzy AHP is an extension of the original AHP developed by Saaty in the 1970s \cite{Saaty1987}. Since Saaty's original development of AHP, multiple means of fuzzy AHP have emerged. Some notable fuzzy AHP approaches, as noted in \cite{Kahraman2010} include:
+\begin{itemize}
+\item Van Laarhoven and Pedrycz's approach from 1983 using triangular membership functions
+\item Buckley's 1985 use of trapezoidal membership functions to determine fuzzy priorities
+\item Cheng's 1997 approach focused on the grade value of the membership function.
+\item Kahraman et al. generate a fuzzy weighted evaluation \cite{Kahraman2010}
+\item Chang presented a new approach first determining triangular fuzzy numbers, then applying extent analysis method \cite{Chang1996}
+\end{itemize}
+
+ In the Buckley approach to fuzzy AHP, which is applied in this paper, $\alpha$ represents a value between zero and one reflecting the uncertainty.  Uncertainty is greatest when $\alpha$ is close to zero and least when close to one. In a trapezoidal membership approach, the lower left point of the triangle, where $\alpha$ equals zero, is the minimum fuzzy number, the points making up the middle represent the most likely fuzzy number, and the point at zero on the right represents the maximum fuzzy number \cite{Pan2008}. The higher the fuzzy number, the more important that criteria is, or the stronger the alternative.
+% * <r.angelo.borrelli@gmail.com> 2018-03-16T19:16:01.049Z:
+%
+% > In a trapezoidal membership approach, the lower left point of the triangle, where $\alpha$ equals zero, is the minimum fuzzy number, the points making up the middle represent the most likely fuzzy number, and the point at zero on the right represents the maximum fuzzy number \cite{Pan}.
+% Is there a figure you can include with the explanation?
+%
+% ^.
+
+ As described in \cite{Kahraman2010}, after receiving the numbers from the decision makers, calculate a fuzzy weight by finding the geometric mean for each row in each of the AHP matrices:
+
+ \begin{equation}
+ z_i=[\prod_{j=1}^n t_{ij}]^{\frac{1}{n}}
+ \end{equation}
+
+ Where $t_{ij}=(a_{ij},b_{ij}, c_{ij}, d_{ij})$ which correspond to the fuzzy values in Table 1 below. $n$ is the number of values in each row.  For example, if three experts were taking a survey with three pairwise comparisons, there would be nine total answers in each row. To find the performance scores ($r$), first sum each of the geometric means in each row, then weight each of the values accordingly:
+
+\begin{equation}
+r_{ij}=(\frac{a_i}{d},\frac{b_i}{c},\frac{c_i}{b},\frac{d_i}{a})
+\end{equation}
+
+To find the fuzzy utility:
+
+\begin{equation}
+U_i=\sum_{j=1}^n w_j*r_{ij}
+\end{equation}
+
+where w is the weight found by the comparison of the importance of the various criteria to one another. To find the membership function $(M(x)$, take the lowest value of the utility set and set the membership function to zero.  For the middle values of the utility set, the membership function is one. For all values greater than the greatest member of the utility set, the membership function is zero. For a utility set $(x_1,x_2,x_3,x_4)$
+
+\begin{center}
+\begin{tabular}{ |c|c| }
+ \hline
+ x & M(x)\\
+ \hline
+ $\leq x_1$  & 0 \\
+ $\geq x_4$ & 0  \\
+ $x_2 \leq x \leq x_3$ & 1  \\
+ $x_1 \leq x \leq x_2$ & $\alpha \in [0,1]$\\
+ $x_3 \leq x \leq x_4$ & $\alpha \in [0,1]$\\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{table}[h!]
+\centering
+\caption{Fuzzy Logic Value Mapping}
+\label{Fuzzy values}
+\begin{tabular}{lll}
+Description                                                            & Values        & Inverse           \\
+\hline
+Equal                                                                  & (1, 1, 1, 1)     & (1, 1, 1, 1)         \\
+\hline
+Equal Importance                                                       & (1/2, 3/4, 5/4, 3/2) & (2/3, 4/5, 4/3, 2)      \\
+\hline
+Weak Importance                                                        & (1, 3/2, 5/2, 3)   & (1/3, 2/5, 2/3, 1)   \\
+\hline
+Strong Importance                                                      & (2, 5/2, 7/2, 4)     & (1/4, 2/7, 2/5, 1/2) \\
+\hline
+\begin{tabular}[c]{@{}l@{}}Very Strong\\ Importance\end{tabular}       & (5, 11/2, 13/2, 7)     & (1/7, 2/11, 2/13, 1/5) \\\hline
+\begin{tabular}[c]{@{}l@{}}Absolutely Strong\\ Importance\end{tabular} & (7, 15/2, 17/2, 9)     & (1/9, 2/17, 2/15, 1/7)
+\end{tabular}
+\end{table}
+
+\section{Expert AHP Survey}
+The objective in this research is to determine the optimal industrial process to include in a generic NRHES industrial park based on three criteria. The options are desalination, high temperature steam electrolysis, and synthetic fuel production. The criteria the options are judged on are ability to fluctuate, safety, and profitability. The optimal way to perform an Analytic Hierarchy Process (AHP) is to gather a group of experts with complementary specializations in a general field to discuss the relative values of various options under determined criteria. For example, the optimal way to perform an AHP to determine the optimal industrial process in a NRHES is to gather a group of experts in nuclear renewable hybrid energy systems with specialties in understanding each of the specific industrial processes. The group could discuss the relative values to give to each of the alternatives for a given criterion. Due to the ease of access, the values found for this research came from sending a survey to experts.  Other AHP evaluations, employ similar methods For this research, an expert is defined as someone who has published research or reports on nuclear renewable hybrid energy systems \cite{Pan2008}. The overall hierarchy of the analytic hierarchy process under consideration in this research is displayed in Figure 1 below.
+
+	We chose the alternatives of desalination, hydrogen production, and synthetic fuels production due to their prominent role in research surrounding N-RHES \cite{Bragg-Sitton2014,Locatelli2015,Kim2016,Bragg-Sitton2016,Garcia2016,Shropshire2011, Ruth2014,Bienvenu2015}.  We chose the criterion of ability to fluctuate as the industrial process in a NRHES will need to be able to fluctuate to adjust to change demand as well as the dynamic generation from the industrial process.  We chose the criterion of safety due to the inherent need for safety, especially within the context of the nuclear safety culture.  Safety underlies both the characteristic of ability to fluctuate and profitability. If the industrial process is not safe, it will not run, and therefore the other two characteristics are negligible. We chose profitability as clearly the whole NRHES will need to be profitable in order to continue to run.  The industrial process provides a secondary source of income  increasing the overall profitability of the system as a whole.
+
+	We chose the alternatives of desalination, hydrogen production, and synthetic fuels production due to their prominent role in research surrounding N-RHES \cite{Bragg-Sitton2014,Locatelli2015,Kim2016,Bragg-Sitton2016,Garcia2016,Shropshire2011, Ruth2014,Bienvenu2015}.  We chose the criterion of ability to fluctuate as the industrial process in a NRHES will need to be able to fluctuate to adjust to change demand as well as the dynamic generation from the industrial process.  We chose the criterion of safety due to the inherent need for safety, especially within the context of the nuclear safety culture.  Safety underlies both the characteristic of ability to fluctuate and profitability. If the industrial process is not safe, it will not run, and therefore the other two characteristics are negligible. We chose profitability as clearly the whole NRHES will need to be profitable in order to continue to run.  The industrial process provides a secondary source of income  increasing the overall profitability of the system as a whole.
+
+
+\begin{figure}[h!]
+  \caption{A figure displaying the overall hierarchy of the industrial processes under evaluation for inclusion in the NRHES}
+  \centering
+  \includegraphics[width=0.9\textwidth]{AHP_hierarchy.PNG}
+\end{figure}
+
+There were five experts who completed the Analytic Hierarchy Process for a Nuclear Renewable Hybrid Energy System survey. Due to the small number of experts included in the survey, a fuzzy systems approach has been applied to the AHP. Tsyganok et. al. determined that the expert competence should always be taken into consideration, especially when there are less than 50 experts included in the evaluation \cite{Tsyganok2012}. Initially, a standard AHP was applied to the expert survey data. AHP is generally done on a one to nine scale.
+
+
+
+ For this research, the same NRHES with only the industrial process switched out will be compared. The assumptions for this research include:
+\begin{itemize}
+\item The process used for hydrogen production is high temperature steam electrolysis with thermal as well as electrical coupling to the nuclear power plant
+\item  The process for desalination is thermal desalination through distillation directly using heat from the nuclear power plant
+\item The synthetic fuel process is a Fischer-Tropsch method using coal as the hydrocarbon source
+\item Each of the processes consumes the same amount of heat from the nuclear power plant
+\item All of the industrial processes are thermally coupled
+\item Regional accessibility of feedstocks for each of the industrial processes are the same
+\item Regional transportation costs are the same
+\item Regulatory and taxation costs are the same
+\end{itemize}
+
+As can be seen in Table 2 below, the scale for the answers for the second part of the question ranged from at two to  nine.  In the initial question the expert determines which of the alternatives better fits the criteria.  If the two alternatives were judged to equally answer the question, then a value of 1 was assigned to the relative importance of both. Table 3 shown below displays the relative values for each of the characteristics considered in the AHP. The values are chosen on a scale of one to nine, with the industrial process strongly reflecting that characteristic receiving a nine and the characteristic relatively less reflecting those characteristics receiving appropriate smaller numbers. While the safety of the system is in reality the most important characteristic, as it is the foundation which the economic and grid reliability characteristics rely on, the safety issues are the most easy to mitigate and the most well known. Safety is also included in the economic and grid reliability metrics, as both depend on a functioning system.
+
+\begin{table}[h!]
+\centering
+\caption{Example of questions given in the Expert AHP survey}
+\label{my-label}
+\begin{tabular}{l}
+Questions included in the expert AHP survey:                                                                                   \\ \hline
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Q1a: Do you think that the ability to fluctuate,is more important\\ than profitability of an industrial process?\\ Q1b: From 2 to 9, how would you compare the importance of \\ safety of an industrial process to the ability of the industrial process to fluctuate?\\ Q2a: Do you think that the ability to fluctuate,is more important than \\ profitability of an industrial process?\\ Q2b: From 2 to 9, how would would you compare the importance \\ of safety of an industrial process to the ability of the industrial process to fluctuate?\end{tabular}} \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{AHP Scale Description}
+\label{my-label}
+\begin{tabular}{|l|l|l|}
+\hline
+Quantitative Value & Explanation                                                                                                                              & Verbal Judgement                                                        \\ \hline
+1                  & \begin{tabular}[c]{@{}l@{}}They are equally important \\ or equally meet the criterion\end{tabular}                                      & Equally more important                                                  \\ \hline
+2                  & \begin{tabular}[c]{@{}l@{}}Experience and judgement \\ favor one alternative over \\ the other by a small margin\end{tabular}            & Weakly more important                                                   \\ \hline
+3                  & \begin{tabular}[c]{@{}l@{}}Experience and judgement \\ moderately favor one \\ alternative over the other\end{tabular}                   & Weakly more important                                                   \\ \hline
+4                  & \begin{tabular}[c]{@{}l@{}}Experience and judgement \\ clearly favor one \\ alternative over the other\end{tabular}                      & Strongly more important                                                 \\ \hline
+5                  & \begin{tabular}[c]{@{}l@{}}Experience and judgement \\ strongly favor one \\ alternative over the other\end{tabular}                     & Strongly more important                                                 \\ \hline
+6                  & \begin{tabular}[c]{@{}l@{}}Practice suggests moderate\\ preference for one alternative \\ over the other\end{tabular}                    & \begin{tabular}[c]{@{}l@{}}Very strongly more\\ important\end{tabular}  \\ \hline
+7                  & \begin{tabular}[c]{@{}l@{}}One alternative is favored \\ very strongly over the other \\ and has been shown in practice\end{tabular}     & \begin{tabular}[c]{@{}l@{}}Very strongly more \\ important\end{tabular} \\ \hline
+8                  & \begin{tabular}[c]{@{}l@{}}It is fairly clear that, in practice\\ one alternative is better than the \\ other\end{tabular}               & \begin{tabular}[c]{@{}l@{}}Absolutely more \\ important\end{tabular}    \\ \hline
+9                  & \begin{tabular}[c]{@{}l@{}}The evidence favoring one \\ alternative over the other is of\\ the highest possible affirmation\end{tabular} & \begin{tabular}[c]{@{}l@{}}Absolutely more \\ important\end{tabular}    \\ \hline
+\end{tabular}
+\end{table}
+
+\section{Results and Discussion}
+As can be seen in table 4, the utility set values which comprise the membership function are highest for desalination. The utility set generates the weighted value for each of the alternatives using the geometric mean method discussed above. As the higher the utility the greater the value, desalination ranks highest of the options for an industrial process given the criteria. As can be seen in Table 5, safety clearly was prioritized.  Due to the high value placed on safety, and the sense that desalination is safer than the alternatives, it follows that it has a greater fuzzy number. Clearly, the heavy weight placed on safety played a major role in determining the outcome.
+
+While AHP provides a means to compare various options and criteria, it is limited by not including vital information surrounding when a certain standard has been met. In the case of this research, safety and flexibility standards could have been fully met by all of the industrial processes.Safety, instead of being a relative point of comparison, maybe better treated as a set of standards to be achieved, such as those presented in the ISO standards for cogeneration \cite{ISO2017}. While desalination is perceived to be a safer industrial process, that does not mean that a synthetic fuel upgrading system or a high temperature steam electrolysis plant is unsafe to couple to a nuclear power plant. The fact that desalination is perceived as safer and more able to fluctuate becomes negligible at that point. AHP is a beneficial tool when determining a relative value between alternatives.  For example, profitability is a valuable characteristic to compare on relative terms.
+
+NRHES are difficult systems to have a fully developed sense of expertise surrounding. Due to the industrial parks including different components as well as the importance of including technical, economic, and political variables in the decision making. While an AHP is a valuable tool because it is able to include a variety of characteristics from different disciplines, there need to be experts representing each of the disciplines. Furthermore, the more experts included in the survey, the stronger the data and the more likely a valid conclusion can be drawn from the data.
+\begin{table}[h!]
+\centering
+\caption{Utility Set values for each of the industrial processes}
+\label{my-label}
+\begin{tabular}{|l|l|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Industrial \\ Process\end{tabular} & Utility Set               \\ \hline
+Desalination                                                  & (0.412, 0.641, 1.291, 1.891) \\ \hline
+\begin{tabular}[c]{@{}l@{}}Hydrogen\\ Production\end{tabular} & (0.029, 0.047, 0.084, 0.136) \\ \hline
+\begin{tabular}[c]{@{}l@{}}Synthetic \\ Fuels\end{tabular}    & (0.086, 0.128, 0.265, 0.437) \\ \hline
+\end{tabular}
+\end{table}
+
+
+
+
+\begin{table}[h!]
+\centering
+\caption{Performance Scores of Safety for the various industrial processes included}
+\label{my-label}
+\begin{tabular}{|l|l|}
+\hline
+Industrial Process                                                    & Safety Performance Score     \\ \hline
+Deslination                                                           & (0.309,0.424, 0.708, 0.917)  \\ \hline
+\begin{tabular}[c]{@{}l@{}}Hydrogen \\ Production\end{tabular}        & (0.118, 0.162 ,0.277 ,0.390) \\ \hline
+\begin{tabular}[c]{@{}l@{}}Synthetic Fuels \\ Production\end{tabular} & (0.139, 0.181, 0.317, 0.459) \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{Ability to Fluctuate Performance Scores for the various industrial processes included}
+\label{my-label}
+\begin{tabular}{|l|l|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Industrial \\ Process\end{tabular} & \begin{tabular}[c]{@{}l@{}}Ability to Fluctuate \\ Performance Scores\end{tabular} \\ \hline
+Desalination                                                  & (0.328, 0.436, 0.687, 0.868)                                                       \\ \hline
+\begin{tabular}[c]{@{}l@{}}Hydrogen\\ Production\end{tabular} & (0.183, 0.234, 0.365, 0.496)                                                       \\ \hline
+\begin{tabular}[c]{@{}l@{}}Synthetic \\ Fuels\end{tabular}    & (0.104, 0.129, 0.199, 0.262)                                                       \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{Profitability Performance Scores for the various industrial processes included}
+\label{my-label}
+\begin{tabular}{|l|l|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Industrial \\ Process\end{tabular} & \begin{tabular}[c]{@{}l@{}}Profitability \\ Performance Scores\end{tabular} \\ \hline
+Desalination                                                  & (0.110, 0.146, 0.206, 0.271)                                                \\ \hline
+\begin{tabular}[c]{@{}l@{}}Hydrogen\\ Production\end{tabular} & (0.210, 0.282, 0.425, 0.544)                                                \\ \hline
+\begin{tabular}[c]{@{}l@{}}Synthetic \\ Fuels\end{tabular}    & (0.297, 0.383, 0.602, 0.805)                                                \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{Fuzzy weights of each of the criteria. Clearly, safety is weighted most heavily and ability to fluctuate is weighted the least}
+\label{my-label}
+\begin{tabular}{|l|l|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Industrial \\ Process\end{tabular}   & Fuzzy Weights                \\ \hline
+Safety                                                          & (0.552, 0.637, 0.806, 0.919) \\ \hline
+\begin{tabular}[c]{@{}l@{}}Ability to \\ Fluctuate\end{tabular} & (0.057, 0.069, 0.079, 0.095) \\ \hline
+Profitability                                                   & (0.159, 0.185, 0.237, 0.286) \\ \hline
+\end{tabular}
+\end{table}
+
+As can be seen in figure 2 below, the membership function for desalination is clearly the highest.  As can be seen in the performance score table, synthetic fuels upgrading was perceived as both safer and more profitable than hydrogen production, resulting in the generally higher membership function values for the synthetic fuels production. As discussed above, it is possible that all three industrial processes meet a certain threshold of safety and flexibility. In terms of profitability, synthetic fuels upgrading was the highest, followed by hydrogen production, with desalination coming in at a distant third as can be seen in the profitability performance score table.
+
+\begin{figure}[h!]
+  \caption{A figure displaying the fuzzy utility function for the three industrial processes.  The furthest to the right has the highest importance. Clearly Desalination has the greatest fuzzy number.}
+  \centering
+  \includegraphics[width=0.9\textwidth]{membership.PNG}
+\end{figure}
+
+
+\begin{table}[h!]
+\centering
+\caption{AHP Survey answers for determining the relative importance of different criteria}
+\label{my-label}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Pairwise \\ Criteria\end{tabular}                       & 1st Expert       & 2nd Expert       & 3rd Expert & 4th Expert       & 5th Expert       \\ \hline
+\begin{tabular}[c]{@{}l@{}}Safety vs \\ Ability to \\ Fluctuate\end{tabular}       & Safety: 6        & Safety: 9        & Safety: 8  & Safety: 6        & Safety: 7        \\ \hline
+\begin{tabular}[c]{@{}l@{}}Safety vs \\ Profitability\end{tabular}                 & Safety: 8        & Safety: 8        & Safety: 8  & Equal            & Safety: 7        \\ \hline
+\begin{tabular}[c]{@{}l@{}}Ability to \\ Fluctuate\\ vs Profitability\end{tabular} & Profitability: 8 & Profitability: 7 & Equal      & Profitability: 8 & Profitability: 4 \\ \hline
+\end{tabular}
+\end{table}
+
+\newpage
+\section{Conclusion and Future Work}
+
+AHP should be used early in the design and decision making process to determine the best options given a set of criteria. Unlike other systems which can be compared to experimental setups, AHP evaluates systems which cannot have large scale experiments. Given the criteria of safety, ability to fluctuate, and profitability a multi-stage flash distillation system appears to be the best choice in a generic setup when compared with synthetic fuels upgrading and hydrogen production from high temperature steam electrolysis. In future work applying AHP to NRHES configurations, considerations such as access to feedstocks, for example water and hydrocarbons, will likely play a large role in determining the industrial process incorporated.
+
+ Future work on applying AHP to NRHES would include many more criteria, subcriteria, and alternatives which are important to evaluate on a relative basis.  Criteria such as emissions, a key driver for NRHES, would be important to consider before determining the optimal industrial process for a given industrial park. Other criteria such as likely regulatory barriers and state of development of the industrial process technology would also be valuable to include in future research.
+
+The results from the AHP Expert survey will determine which industrial process is coupled to the exergy model.
 \section{AHP Results}
 
+\chapter{Thermal Versus Electrical Coupling}
+From the literature review on NRHES, a notable gap in the current research is modeling the benefits gained from thermally coupling systems as compared to electrically coupling.  The efficiency benefits would have to be greater than the costs associated with co-location.  An exergy analysis of both the electrically coupled and thermally coupled industrial processes would provide a quantitative measure of the benefits of thermally coupling.
 
+
+\section{Exergy Analysis}
+The exergetic efficiency concept, also known as second law efficiencies, can be applied to all of the various components involved in the coupling of a Nuclear Renewable Hybrid Energy system. The exergy analysis can then be combined with an economic analysis determining where exergy losses are most costly. For this project, the components an exergetic analysis will be applied to include the aspects of a Rankine Cycle as well as the multi stage flash distillation system. In order to compare a thermally coupled industrial process with an electrically coupled desalination process, the exergy analysis for the electrically coupled plant will stop at the generation of the electricity. In order to evaluate the exergetic efficiency of nuclear as compared to other resources for electricity production, an exergetic analysis will be done on coal plants as well as a concentrated solar generation system.
+
+  Boldon et. al. has already performed an initial exergy analysis on a nuclear hybrid energy system, assuming a Small Modular Reactor (SMR) \cite{Boldon}. Boldon et. al. discusses the value of combining exergy and economics to analyze costs associated with exergetic losses.  Boldon et. al. analyzes a steady state system providing a constant grid output of 245 MWe.  The nuclear plant is both thermally and electrically coupled to a High Temperature Steam Electrolysis industrial process. After performing the thermodynamic exergy analysis, Boldon et. al. incorporates costs of resources and operations thereby able to assign a unit exergetic cost to each of the components in the system.
+
+ An exergetic analysis of the Kalundborg industrial ecosystem evaluates the streams going into and out of the Asnaes power plant \cite{Valero2012}.  Valero et. al. contrast the exergy of the coupled system with an uncoupled system. As can be seen in figure below, the Kalundborg industrial ecosystem is comprised of the Statoil refinergy, the Asnaes coal power plant, the Novo Group pharmaceutical company, district heating for the local people, the Gyproc plasterboard manufacturer, as well as a fish farm, and  the Aalborg Portland cement company. The major exergetic gains for the system come from sharing the process natural gas, the district heating, heating the fish farm, and using clinker (a coal plant byproduct) to produce cement \cite{Valero2012}. The overall reduction in irreversibilities annually from coupling the systems at Kalundborg amount to approximately 1476 GWh/year, the equivalent of the annual production of a 170.235 MW power plant. An analysis which compares the exergy of a coupled system with the seperate industrial processes provides great insight into what are the thermodynamic and economic benefits of co-locating processes.
+\begin{figure*}
+\includegraphics[width=\textwidth]{kalundborg_cases.PNG}
+\caption{\small \sl This figure displays the two cases evaluated in Valero et. al. Figure a shows the industrial ecosystem in the current coupled form. Figure b shows the second case where there is no coupling.}
+\end{figure*}
+
+As the NRHES evaluated for this thesis includes a multi-stage flash (MSF) distillation system, I will include a brief review of a previous MSF distillation exergy analysis. Kahraman et. al. perform an exergy analysis on a large MSF plant \cite{Kahraman2005}.  Multi-Stage Flash distillation only requires heat at about 100 degrees Celsius, making it possible to use the waste heat from a nuclear power plant to desalinate the water. In the exergy analysis, Kahraman et. al. takes the temperature of the salinated water to be the dead state, making the initial exergy zero. The exergy analysis includes finding the exergy of the heat exchanger, of four pumps in the system, as well as the difference in exergies between the incoming water and the exiting stream.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{MSF_exergy.PNG}
+\caption{\small \sl The Multi-Stage Flash exergy analysis diagram showing where exergy is lost in the system}
+\end{figure*}
+
+
+	Assuming a closed system, the exergy rate balance is:
+\begin{equation}
+\frac{dE}{dt}=\Sigma_j(1-\frac{T_0}{T_j})\dot{Q}_j-(\dot{W}-p_0*\frac{dV}{dt})-
+\end{equation}
+
+The exergy analysis done here will assume a Rankine cycle and a multi-stage flash distillation system.  First, we will evaluate the use of waste heat from both a nuclear power plant and a natural gas plant.  Then we will evaluate the direct heat from the reactor for both a nuclear power plant and a natural gas plant. An exergy analysis really evaluates where there are irreversibilities in a system.  In the case of the thermally coupled systems, the irreversibilities associated with the electrical generation and reconversion into heat do not exist.  While there are still losses in a thermally coupled system, primarily associated with having to pump the water, there are not the losses associated with the conversion of energy from heat to electrical and back.
+
+A quick exergy analysis comparing electrical coupling and thermally coupling would only evaluate the losses associated with the power conversion.  The quick exergy analysis would not permit an evaluation of how much product, and the quality of the product, produced in each instance. In order to do an economic analysis, evaluating the \$/exergy, requires knowing the amount of product sold as well as the value of the product.
+
+Multistage flash distillation (MSF) is the most common thermal desalination system.  MSF is able to produce clean water in large quantities, with plants in Saudi Arabia and the United Arab Emirates having capacities of 600,000-880,000 $m^3/day$ \cite{El-Dessouky2016}. The general idea of how an MSF system works is briny or sea water is passed through a series of chambers, each with successively lower temperature and pressure.  The water is quickly flashed, or vaporized.  The water, without the brine, is then condensed forming freshwater.  There are a wide range of stages, depending on the concentration of the feedwater brine and the desired state of purity for the freshwater.
+
+The Safe Drinking Water Act of 1974 gives the EPA the authority to determine safe drinking water standards.
+
+Energy balance equation for a single pass Multi-Stage Flash Desalination plant.
+
+\begin{equation*}
+\begin{aligned}
+\frac{dH_{bj}}{dt}=[B_{bj-1}h_{bj-1}-B_{bj}h_{bj}-(B_{bj-1}-B_{bj}-H_{bj}A_{bj}\frac{d\rho_{bj}}{dt}h_{vj})]\\
+*[\frac{1}{A_{bj}\rho_{bj}(h_{bj}-h_{vj})}] (-H_{bj}*\frac{h_{bj}}{\rho_{bj}(h_{bj}-h_{ij})}*\frac{d\rho_{bj}}{dt})-\frac{H_{bj}}{h_{bj}-h_{vj}}\frac{dh_{bj}}{dt}, 
+\end{aligned}
+\end{equation*}
+
+Mass Balance of the Distillate:
+\begin{equation*}
+\frac{dH_{dj}}{dt}=\frac{1}{A_{dj}{\rho_{dj}}}*[B_{i-1}*D_{i-1}-B_j-D_j]-\frac{H_{dj}d\rho_{dj}}{\rho_{dj}*dt}-\frac{A_{bj}\rho_{bj}dH_{bj}}{A_{dj}\rho_{dj}dt}-\frac{H_{bj}A_{bj}d\rho_{bj}}{A_{dj}\rho_{dj}dt}
+\end{equation*}
+
+Salt balance in the flashing brine:
+
+In a multi-stage flash system, it is important to keep the temperature relatively low, no greater than 120 \degree C in order to minimize fouling.
+
+
+Energy efficiency is often characterized as using less energy to perform the same tasks.
+From discussion with Dr. Cristian Rabiti on 2/22/2018:
+
+- Prove electrical coupling only beneficial when lag (delayed response) is included.  Show the marginal cost gains become zero when factoring in the gains from the nuclear power plant not having to curtail as compared to the marginal costs of running the industrial process. Calculate the NPV as equaling zero between the industrial process and the NPP.
+
+-Calculate the cost of exergy for coal, nuclear, natural gas.  Demonstrate that, in terms of exergy, there is a lot more to gain from thermally coupling as opposed to electrically coupling.
+
+Ways that thermal coupling can increase efficiency of industrial processes:
+\begin{itemize}
+\item Desalination - pre heating for an RO plant, direct heating for MED and MSF plants
+\end{itemize}
 
 
 
@@ -548,7 +843,167 @@ Example summary and conclusions. You can refer to chapters and sections using th
 
 % Appendices are done as LaTeX chapters
 \chapter{Your fist appendix}
-First appendix content
+Fuzzy Analytic Hierarchy Code:
+
+import numpy
+import csv
+import matplotlib.pyplot as plt
+
+\#Functions
+def GeometricMean(LineList, Spot):
+    values = [x[Spot] for x in LineList]
+    GeoMean=1
+    for i in range(len(LineList)):
+        GeoMean=GeoMean*values[i]
+    return(GeoMean**(1/len(LineList)))
+
+def PerformanceScores(a, b, c, d):
+    \# The number of rows in each matrix will always be three, so I am hard coding it in
+    PS=[0]*3
+    for x in range(3):
+        PS[x]=[a[x]/sum(d), b[x]/sum(c), c[x]/sum(b), d[x]/sum(a)]
+    return(PS)
+
+\#Weight all of the performance score values
+\#Add all of the values in the individual locations together
+\#Return the utility function for safety, ability to fluctuate, and profitability
+def WeightPS($r_{ij}$, weight):
+    weightedPS=[0]*len($r_{ij}$)
+    for i in range(len($r_{ij}$):
+        weightedPS[i]=[a*b for a,b in zip($r_{ij}$[i],weight[i])]
+        print(i,$r_{ij}$[i])
+    Desal=weightedPS[0]
+    HProd=weightedPS[1]
+    SynFuel=weightedPS[2]
+    return(Desal, HProd, SynFuel)
+
+def Utility(A, B, C):
+    utility=[0]*len(C)
+    for x in range(len(C)):
+        utility[x] = A[x]+B[x]+C[x]
+    return(utility)
+
+
+
+
+\#CONSTANTS AND INPUT
+\#1 corresponds to equally important
+\#2-3 correspond to weakly more important
+\#4-5 corresponds to strongly more important
+\#6-7 correspond to very strongly more important
+\#8-9 correspond to absolutely more important
+
+Equal = (1.0,1.0,1.0,1.0)
+EqI = (1/2,3/4,5/4,3/2)
+InvEqI=(2/3,4/5,4/3,2)
+Weak = (1,3/2,5/2,3)
+InvWeak=(1/3,2/5,2/3,1)
+Strong = (2,5/2,7/2,4)
+InvStrong=(1/4,2/7,2/5,1/2)
+Very = (5,11/2,13/2,7)
+InvVery=(1/7,2/11,2/13,1/5)
+Abs=(7,15/2,17/2,9)
+InvAbs=(1/9,2/17,2/15,1/7)
+
+SafetyLine1=[Equal, Equal, Equal, Equal, Equal, Weak,Strong, EqI, Strong, Very, Strong, Strong, EqI, Strong, Strong]
+SafetyLine2=[InvWeak, InvStrong, InvEqI, InvStrong, InvVery, Equal, Equal, Equal, Equal, Equal, EqI, EqI,EqI, EqI, InvWeak]
+SafetyLine3=[InvStrong, InvStrong, InvEqI, InvStrong, InvStrong, InvEqI, InvEqI, InvEqI, InvEqI, Weak, Equal, Equal, Equal, Equal, Equal]
+
+FluctuateLine1 = [Equal, Equal, Equal, Equal, Equal, EqI, EqI, EqI, Abs, Very, Strong, Abs, EqI, Strong, Strong]
+FluctuateLine2= [InvEqI, InvEqI, InvEqI, InvAbs, InvVery, Equal, Equal, Equal, Equal, Equal, Abs, Abs, EqI, InvWeak, EqI]
+FluctuateLine3= [InvStrong, InvAbs, InvEqI, InvStrong, InvStrong, InvAbs, InvAbs, InvEqI, Weak, Equal, Equal, Equal, Equal, Equal]
+
+ProfitabilityLine1 = [Equal, Equal, Equal, Equal, Equal, InvVery, EqI, Very, InvStrong, InvVery, EqI, InvVery, InvAbs, InvStrong, InvWeak]
+ProfitabilityLine2 = [Very, InvEqI, InvVery, Strong, Very, Equal, Equal, Equal, Equal, Equal, EqI, EqI, InvAbs, EqI, Strong]
+ProfitabilityLine3 = [InvEqI, Very, Abs, Strong, Weak, InvEqI, InvEqI, Abs, InvEqI, InvStrong, Equal, Equal, Equal, Equal, Equal]
+
+CharLine1=[Equal, Equal, Equal, Equal, Equal, Very, Abs, Abs, Very, Very, Abs, Abs, Abs, EqI, Very]
+CharLine2=[InvVery, InvAbs, InvAbs, InvVery, InvVery, Equal, Equal, Equal, Equal, Equal, InvAbs, InvVery, EqI, InvAbs]
+CharLine3=[InvAbs, InvAbs, InvAbs, InvEqI, InvVery, Abs, Very, InvEqI, Abs, Strong, Equal, Equal, Equal, Equal, Equal]
+
+\#Find the Geometric Mean for Each of the matrices and each location
+SafeSpot0 = [GeometricMean(SafetyLine1, 0), GeometricMean(SafetyLine2, 0), GeometricMean(SafetyLine3, 0)]
+SafeSpot1 = [GeometricMean(SafetyLine1, 1), GeometricMean(SafetyLine2, 1),GeometricMean(SafetyLine3, 1)]
+SafeSpot2 = [GeometricMean(SafetyLine1, 2), GeometricMean(SafetyLine2, 2),GeometricMean(SafetyLine3, 2)]
+SafeSpot3 = [GeometricMean(SafetyLine1, 3), GeometricMean(SafetyLine2, 3),GeometricMean(SafetyLine3, 3)]
+
+FlucSpot0 =  [GeometricMean(FluctuateLine1, 0), GeometricMean(FluctuateLine2, 0), GeometricMean(FluctuateLine3, 0)]
+FlucSpot1  = [GeometricMean(FluctuateLine1, 1), GeometricMean(FluctuateLine2, 1), GeometricMean(FluctuateLine3, 1)]
+FlucSpot2  = [GeometricMean(FluctuateLine1, 2), GeometricMean(FluctuateLine2, 2), GeometricMean(FluctuateLine3, 2)]
+FlucSpot3  = [GeometricMean(FluctuateLine1, 3), GeometricMean(FluctuateLine2, 3), GeometricMean(FluctuateLine3, 3)]
+
+ProfitSpot0 =  [GeometricMean(ProfitabilityLine1, 0), GeometricMean(ProfitabilityLine2, 0), GeometricMean(ProfitabilityLine3, 0)]
+ProfitSpot1  = [GeometricMean(ProfitabilityLine1, 1), GeometricMean(ProfitabilityLine2, 1), GeometricMean(ProfitabilityLine3, 1)]
+ProfitSpot2  = [GeometricMean(ProfitabilityLine1, 2), GeometricMean(ProfitabilityLine2, 2), GeometricMean(ProfitabilityLine3, 2)]
+ProfitSpot3  = [GeometricMean(ProfitabilityLine1, 3), GeometricMean(ProfitabilityLine2, 3), GeometricMean(ProfitabilityLine3, 3)]
+
+CharSpot0 =  [GeometricMean(CharLine1, 0), GeometricMean(CharLine2, 0), GeometricMean(CharLine3, 0)]
+CharSpot1  = [GeometricMean(CharLine1, 1), GeometricMean(CharLine2, 1), GeometricMean(CharLine3, 1)]
+CharSpot2  = [GeometricMean(CharLine1, 2), GeometricMean(CharLine2, 2), GeometricMean(CharLine3, 2)]
+CharSpot3  = [GeometricMean(CharLine1, 3), GeometricMean(CharLine2, 3), GeometricMean(CharLine3, 3)]
+
+\#Save the Performance Score values
+SafetyPS = PerformanceScores(SafeSpot0, SafeSpot1, SafeSpot2, SafeSpot3)
+FlucPS = PerformanceScores(FlucSpot0, FlucSpot1, FlucSpot2, FlucSpot3)
+ProfitPS = PerformanceScores(ProfitSpot0, ProfitSpot1, ProfitSpot2, ProfitSpot3)
+Weights = PerformanceScores(CharSpot0, CharSpot1, CharSpot2, CharSpot3)
+
+
+
+\#I am passing in the performance scores and returning the weighted performance scores for each of the options
+DesalSafe, HProdSafe, SynFuelSafe = WeightPS(SafetyPS, Weights)
+DesalFluc, HProdFluc, SynFuelFluc = WeightPS(FlucPS, Weights)
+DesalProf, HProdProf, SynFuelProf = WeightPS(ProfitPS, Weights)
+
+DesalU=Utility(DesalSafe, DesalFluc, DesalProf)
+HProdU= Utility(HProdSafe, HProdFluc, HProdProf)
+SynFuelU=Utility(SynFuelSafe, SynFuelFluc, SynFuelProf)
+
+\#Save the PerformanceScores to a file
+with open('PerformanceScoresnew.csv', 'w') as myfile:
+    out=csv.writer(myfile)
+    out.writerow('Safety')
+    out.writerow(SafetyPS[0])
+    out.writerow(SafetyPS[1])
+    out.writerow(SafetyPS[2])
+    out.writerow('Fluctuate')
+    out.writerow(FlucPS[0])
+    out.writerow(FlucPS[1])
+    out.writerow(FlucPS[2])
+    out.writerow('Profitability')
+    out.writerow(ProfitPS[0])
+    out.writerow(ProfitPS[1])
+    out.writerow(ProfitPS[2])
+    out.writerow('Fuzzy Weights')
+    out.writerow(Weights[0])
+    out.writerow(Weights[1])
+    out.writerow(Weights[2])
+myfile.close()
+
+
+with open('Utility2.csv', 'w') as ufile:
+    output = csv.writer(ufile)
+    output.writerow('Desalination')
+    output.writerow(Utility(DesalSafe, DesalFluc, DesalProf))
+    \#output.writerow(DesalBound)
+    output.writerow("Hydrogen")
+    output.writerow(Utility(HProdSafe, HProdFluc, HProdProf))
+    \#output.writerow(HProdBound)
+    output.writerow("Synthetic Fuels")
+    output.writerow(Utility(SynFuelSafe, SynFuelFluc, SynFuelProf))
+    \#output.writerow(SynFuelBound)
+
+ufile.close()
+
+
+plt.plot(Utility(DesalSafe, DesalFluc, DesalProf),[0, 1, 1, 0], label = "Desalination")
+\#plt.plot(Utility(HProdSafe, HProdFluc, HProdProf), [0,1,1,0], label = "Hydrogen Production")
+\#plt.plot(Utility(SynFuelSafe, SynFuelFluc, SynFuelProf), [0,1,1,0], label = "Synthetic Fuels" )
+plt.axis([0, 2, 0, 1.2])
+\#plt.xticks(arange(20))
+\#plt.legend()
+plt.show()
+
 
 % ** This is an example of a YAML file listing, but it could be anythig, e.g full experiment results, or list of equipment used. **
 % \clearpage
