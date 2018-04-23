@@ -1,176 +1,313 @@
-\documentclass{article}                                                                           %basic LaTeX document type
+% --------------------------------------------------------------------------
+% This is a LaTeX template for a University of Idaho Master's thesis.
+% It uses a custom document class file, UIdahoMastersThesis
+% The class and template adhere to the formatting guidelines established by UI College of Graduate Studies (CoGS) as of 2016.
+% That being said, DOUBLE CHECK everything, I'm not perfect, and this isn't either.
+% I highly recommend getting it reviewed by the Writing Center and CoGS BEFORE you're finished writing. Seriously.
+% --------------------------------------------------------------------------
+% Author   Christopher Goes
+% Email    goesc@acm.org    (Alternate: goes8945@alumni.uidaho.edu)
+% --------------------------------------------------------------------------
+% This template (and my thesis!) would not be possible without the work of these awesome people.
+%     - Matthew Brown, CS       For sharing his thesis and all the neat hacks it had
+%     - Cara Leatherman, CoGS   For template improvements
+%     - Chris Zeoli, CoGS       For the original UI CoGS template
+% --------------------------------------------------------------------------
 
-\usepackage[margin=1.3in]{geometry}                                                     %set size of all margins
-%\usepackage[left=1.3in, top=1in, right=1in, bottom=1in]{geometry}         %can set margin sizes which are not the same in this way
+% This includes the magical class file with the formatting. ** DO NOT REPLACE THIS. Everything WILL break. **
+\documentclass[12pt]{UIdahoMastersThesis}
 
-%\linespread{2}                                                                                         %option 1 for making text double-spaced
-\usepackage{setspace}                                                                             %option 2 for making text double-spaced
-\doublespacing                                                                                         %set double space
+% --------------------------------------------------------------------------
+% Packages (the class file already imports several. Importing twice usually doesn't hurt, just keep in mind for debugging)
+\usepackage[latin1]{inputenc}
+\usepackage[printonlyused]{acronym} % Use [nolist,nohyperlinks] to not write list of acronyms and not put hyperlinks to entries in list.
+% ** Add any packages you want to use here **
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 
-\usepackage{indentfirst}                                                                          %makes first paragraph of section indented (non-first are by default)
-\setlength{\parindent}{25pt}                                                                     %set size of indentation (15pt is default)
+\makeatletter  % ** DO NOT REMOVE THIS ** (Actually, remove it, compile, and enjoy the stream of errors. Its beautiful :) )
 
-\renewcommand\thesection{\Roman{section}}                                         %set capital Roman numeral section headings
-\renewcommand\thesubsection{\thesection.\Alph{subsection}}                   %set capital Aramaic letters subsection headings
-\renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}} %set capital Arabic numbers subsubsection headings
 
-\renewcommand*\thetable{\Roman{table}}                                              %set capital Roman numeral table numeration
+% --------------------------------------------------------------------------
+% Thesis Information
+\title{Allocating Heat and Electricity Resources in a Nuclear Renewable Hybrid Energy System Using Cyclus}
+\author{Emma K. Redfoot}
+\thesisdegree{Master of Science}  % e.g Master of Science, Master of Engineering, etc.
+\major{Nuclear Engineering}  % e.g Computer Science, Computer Engineering, etc.
+\advisor{R.A. Borrelli, Ph.D.}  % Make sure title of names matches CoGS format requirements!
+\cmone{Michael McKellar, Ph.D.}  % First committee member (Alphabetical order by last name, if I recall correctly)
+\cmtwo{Kathryn Huff, Ph.D.}  % Second committee member
+\deptadmin{Richard Christensen, Ph.D.}  % Department administrator or chair
+\graddate{May, 2018}  % Graduation date, e.g May, 2017
+% --------------------------------------------------------------------------
 
-\usepackage[explicit]{titlesec}                                                                  %package needed for next lines
-\titleformat{\section}{\bfseries}{\thesection.}{1em}{\MakeUppercase{#1}}  %makes section headings bold and upper case characters
-\titleformat{\subsection}{\bfseries}{\thesubsection.}{1em}{#1}                   %makes subsection headings bold
-\titleformat{\subsubsection}{\itshape}{\thesubsubsection.}{1em}{#1}          %makes subsubsection headings in italics
 
-\usepackage{lastpage}                                                                             %package which returns number of last page (same as number of pages)
-\usepackage[figure,table]{totalcount}                                                        %package which counts the number of tables and/or figures
+% Line spacing. The University of Idaho requires thesis formatting to be 1.5-2.0. In LaTeX 1.3=1.5, 1.6=2.0.
+\linespread{1.6}
 
-\usepackage{amsmath}                                                                            %enable `align' equation types
+% Defines section counter for frontmatter. This way section number does not appear in the TOC for frontmatter sections
+\setcounter{secnumdepth}{0}
 
-\renewcommand{\thefootnote}{\alph{footnote}}                                        %sets labeling of footnotes
-\usepackage[]{footmisc}                                                                          %enables double spaced footnotes
-  \renewcommand{\footnotelayout}{\doublespacing}                                  %double spacing of footnotes
+% Sets what level of sections show up in the table of contents. 0 = sections, 1 = subsections, 2 = subsubsections, etc.
+\setcounter{tocdepth}{1}
 
-%%% If you desire to place footnotes at the end of the document, uncomment these four lines and the two related near the end of this file
-%\usepackage{endnotes}                                                                          %enables endnote page
-%  \let\footnote=\endnote                                                                         %sets footnotes to endnotes
-%  \renewcommand*{\theendnote}{\alph{endnote}}                                   %labels endnotes alphabetically
-%  \renewcommand{\notesname}{Footnotes}                                            %renames endnotes title to footnotes
 
-\usepackage{graphicx}                                                                             %enable figures
-\usepackage{multirow}                                                                             %enable `multirow' capability in tables
+% Configure the PDF output (Most of this is optional, it just adds metadata to the PDF)
+\usepackage[% pdftex
+pdfauthor=\author,
+pdftitle=\title,
+pdfsubject={Example subject},
+pdfkeywords={keyword1;keyword2;etc},
+pdfproducer={ShareLatex},  % e.g ShareLatex
+pdfcreator={pdflatex},
+pdfprintscaling={AppDefault}]
+{hyperref}
 
-\usepackage{caption}                                                                              %enables subfigures
-\usepackage[labelformat=simple]{subcaption}                                           %enables subfigure captions
-\captionsetup[table]{labelsep=newline,name=TABLE}                                 %sets table caption formatting options to meet NSE requirements
-\captionsetup[figure]{name=Fig.,labelsep=period}                                     %sets figure caption options to meet NSE requirements
-\renewcommand*\thesubfigure{(\alph{subfigure})}                                    %enables proper labeling of subfigures
-
-\usepackage[colorlinks=true, allcolors=blue]{hyperref}                               %reference and citation hyperlinking linking
-
-\usepackage{subfloat}
-\usepackage{cite}
-\usepackage{lineno, blindtext}
-
-\DeclareMathOperator{\diff}{d}                                                                %can define operators to use in math mode, example in Eq. 2
-\DeclareMathOperator{\erf}{erf}
-
-\begin{document}
-
-%Define fields for \maketitle
-
-\title{Analysis of Using a Nuclear Fuel Cycle Simulator to Model a Nuclear Renewable Hybrid Energy System} %title of paper
-
-\author{
-\vspace{20mm}
-\\Emma K. Redfoot,$^{\text{a},\ast}$ Dr. R.A. Borrelli \\[4pt] %list of authors, with corresponding author marked by asterisk
-\textit{$^a$University of Idaho, Nuclear Engineering Department}\\[-10pt]       %affiliations of authors
-\textit{995 University Blvd., Idaho Falls, ID 83401} \\[-5pt]
-{$^\ast$Email: \href{mailto:redf3263@vandals.uidaho.edu}{redf3263@vandals.uidaho.edu}}}% email address for correspondence
-
-\date{                               %instead of returning the date, this repurposes the \maketitle command to print the number of pages, tables, and figures
-\vspace{40mm}
-Number of pages: \pageref*{LastPage} \\
-Number of tables: \totaltables \\
-Number of figures: \totalfigures
+% Configure hyperlinks
+\hypersetup{
+	colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=black,  %choose some color if you want links to stand out
+	citecolor=black,
+	urlcolor=black,
 }
 
-\clearpage\maketitle
-\thispagestyle{empty}
+% Changes default indenting in list of figures to 0
+%\makeatletter
+\renewcommand*\l@figure{\@dottedtocline{1}{0em}{2.3em}}% Default: 1.5em/2.3em
+\let\l@table\l@figure
+%\makeatother
+
+% Where to look for images
+% (https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics#Graphics_storage)
+% \graphicspath{ {./Figures/} }
+
+% Uncomment to set default style for Listings to be code (Code style is defined in .cls file)
+% \lstset{style=code}
 
 
-\pagebreak
-%~\vfill
-\begin{linenumbers}
+% -------------------------------------------------------------------------
+\begin{document}
 
-\begin{abstract}
-Growing concerns over the impact of fossil fuels on climate change have driven efforts to find low emissions sources of energy. In response, fluctuating renewable energy sources, such as solar and wind power, are growing to meet more of the electricity demand. However, maintaining reliable energy accessibility to the grid requires a stable, non-fluctuating source of power. Nuclear power plants provide nearly emissions-free, reliable energy to the grid \cite{IPCC}. To best reduce reliance on fossil fuels while ensuring reliable energy generation and profitability, nuclear renewable hybrid energy systems (NRHESs) focus on tightly coupling renewable generation with a nuclear power plant by co-locating the generation sources on an industrial park. The industrial park is comprised of at least the nuclear power plant, the renewable energy source, and some form of industrial process that consumes the energy not used by the grid. In this paper, we analyze the computational modeling approaches currently being pursued for NRHES. We further investigate similarities between Nuclear Fuel Cycle Simulators (NFCS) and NRHESs to determine how NRHES development can benefit from the development of NFCSs. This paper begins by reviewing past research on NRHES to determine the necessary functionality of modeling software. After determining the necessary software capabilities for an NRHES model, we discuss the characteristics of a NFCS. The characteristics found common to both systems include the desirability of a flexible modular design, open source, able to be coupled to external pieces of software, including economic modeling, optimization methods, and sensitivity analysis as well as results which are usable to technical and non-technical people alike.
+\frontmatter
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\end{abstract}
+\titleformat{\chapter}[block]{\scshape\LARGE}{\centering\chaptertitlename\  \thechapter:}{1ex}{\centering}{}
+	\titlespacing{\chapter}{0pt}{-40pt}{20pt}
 
-\vfill
+\titleformat{\section}[hang]{\scshape\Large}{\thesection}{1ex}{}
+    \titlespacing{\section}{0pt}{0pt}{10pt}
+	%\titlespacing*{\section}{0pt}{-50pt}{40pt}
+
+\titleformat{\subsection}[hang]{\scshape\large}{\thesection}{1ex}{}
+    \titlespacing{\subsection}{0pt}{0pt}{10pt}
+	%\titlespacing*{\subsection}{0pt}{-50pt}{40pt}
 
 
-\pagebreak
-\section{Introduction}
-Integrating non-emitting sources of power such as solar, wind, and nuclear provides a means of reducing greenhouse gas emissions. A Nuclear Renewable Hybrid Energy System (NRHES) is a power system which involves tightly coupling a nuclear power plant, a renewable, a battery, a natural gas plant, and an industrial process through co-locating the various facilities.  NRHESs are a proposed solution for allowing a nuclear power plant to fluctuate the electric output to the grid with a high penetration of variable energy sources. A NRHES seeks to minimize emissions such that they are significantly less than a renewable with load following by a natural gas plant \cite{Baker2016}.  Natural gas power plants, unlike nuclear and coal power plants, were built with flexibility in mind and are the typical means of load following \cite{MITEnergyInitiative2011}.  Understanding the impact of nuclear renewable hybrid energy systems in meeting future energy demand requires developing rigorous simulations to determine the system's economic prospects as well as its capacity to provide reliable, clean energy.
+% -------------------------------------------------------------------------
+% -- Title Page --
+\thesistitlepage
 
-Renewable sources of energy and nuclear power both have the capacity to play an important role in mitigating climate change \cite {IPCC}. Due to the growth in variable energy generating sources, particularly wind and solar, grid flexibility has become a key driver in power system development \cite {Denholm2011}. Power system flexibility is defined by the Electric Power Research Institute (EPRI) as the "ability to adapt to dynamic and changing conditions, for example, balancing supply and demand by the hour or minute, or deploying new generation and transmission resources over a period of years \cite{EPRI2016}." Power system flexibility differs from load-following.  Load following is described as base-load power generator reductions \cite{Bragg-Sitton2014} or a power plant that adjusts its power output as demand for electricity fluctuates \cite{Masters2004}. Load following generally does not include following the predictable seasonal differences in electricity demand, but focuses more on the daily shifts. In the case of a NRHES, the nuclear power plant (NPP) will continue to run at full power output, allocating more or less electricity to the grid depending on demand.   Optimally, a NRHES will be able to respond to fluctuations in both seasonal and hourly demand. A NRHES combines power system flexibility with load following, adapting to dynamic conditions by changing the output of electricity to the grid.
 
-First, we will provide a literature review covering both nuclear and non nuclear hybrid energy systems.  We will then discuss the ongoing research for modeling a NRHES to evaluate the important characteristics to include in a software model. Third, we will describe nuclear fuel cycle simulators (NFCS). Then we will analyze the similarities between the functionality needed to model a NRHES and a NFCS. While there are differences between the two systems, most obviously time scale and the need for a dynamic feedback response in a NRHES, the two physical systems share some common characteristics. NFCSs are at a more mature state of development, with some capacity to inform future development of NRHES software models.
+% --------------------------------------------------------------------------
+% -- Authorization to Submit Thesis --
+\frontmattersection{Authorization to Submit Thesis}
+\authorizationpage
+\newpage
 
-\section{Background}
-In order to ensure grid reliability (consistent electricity supplied to customers with a high penetration of fluctuating sources of power), traditional base load generating sources, such as nuclear power plants (NPPs), will need to increase their ability to fluctuate output to the electric grid \cite {Denholm2011}. For example, when wind decreases its electricity output, other sources of electricity need to respond quickly to make up for the loss. To supply electricity to a system including variable contributing sources, nuclear generation must be able to quickly increase and decrease its grid contribution. A NPP that is able to load follow would result in a reduction of unused energy while still ensuring grid reliability.
 
-Reducing energy output below capacity for NPPs is sub-optimal due to the materials impacts of fluctuating the reactor and economically inefficient \cite{Nuclear2011}. NPPs are almost entirely comprised of fixed and sunk costs. The majority of the costs for nuclear are capital and operations (not including fuel), costs that do not depend on how much electricity is sold. As of 2010, nuclear fuel accounts for about 10\% of the levelized cost of electricity as compared to 70\%-80\% for natural gas \cite{IEA/NEA}. Due to the relatively small role the fuel plays in the overall costs of running an NPP operation, lowering the power output does not greatly reduce the generating costs. Fluctuating older nuclear power plants that were not designed for such maneuverability can accelerate the aging of the power plant, causing physical and economic damage \cite{Nuclear2011}. Assuming economic conditions in the energy sector remain constant, NPPs must run at near full capacity to compete economically and avoid materials degradation.
+% --------------------------------------------------------------------------
+% -- Abstract --
+\frontmattersection{Abstract}
+\begin{center}
+	{\LARGE\textsc{Abstract}}
+\end{center}
 
-\subsection{Hybrid Energy Systems}
-A Hybrid Energy System (HES) is a coupled means of energy generation generally including at least one renewable and one conventional energy source \cite {Ibrahim2011}. These systems provide electricity through multiple generation sources working together, unlike co-generation which is simultaneously produces heat and power \cite{Rosen2005}." Traditional HES generate only a single product, electricity, from multiple sources. Co-generation systems create multiple outputs, such as electricity and heat, from a single energy generation source. HES have been implemented all over the world in stand-alone and grid connected systems to balance the variability of solar and wind \cite {Garcia2015, Qi2014, Shin2015, Nixon2012, Adaramola2014, Goodbody2013, BorgesNeto2010, McGowan1996}. In standalone systems, the renewable generating source is generally combined with a diesel generator, a battery, or both. The operational goal of all HES is to pair fluctuating energy generation sources with consistent energy producers and/or storage mechanisms in order to have a reliable electrical generating system.
+Growing concerns over the impact of fossil fuels on climate change are driving efforts to use more low emission fuel sources. In response, fluctuating renewable energy sources, such as solar and wind power, are growing to meet more of the electric demand. However, maintaining reliable energy accessibility to the grid requires a stable, non-fluctuating source of power. Nuclear power plants provide low emissions, reliable energy to the grid \cite{IPCC}. To best reduce reliance on fossil fuels while ensuring reliable energy generation and profitability, nuclear renewable hybrid energy systems (NRHES) focus on tightly coupling renewable generation with a nuclear power plant (NPP) by co-locating the generation sources on an industrial park. The industrial park is comprised of at least the NPP, the renewable energy source, and some form of industrial process that consumes the energy not used by the grid.
+This paper analyzes the computational modeling approaches currently being pursued for NRHES, especially the potential benefits of using a Nuclear Fuel Cycle Simulator (NFCS). The paper begins by reviewing past research to determine the necessary software capabilities for an NRHES model. We then discuss the characteristics of a NFCS. The research points towards using the Cyclus fuel cycle simulator as the only open source fuel cycle simulator built with flexibility and modularity in mind. A prototype NRHES model is built and evaluated for benefits of further research. Another challenge NRHES face is finding a figure of merit (FOM) that fully describes the grid reliability and value of the industrial processes of NRHES. This thesis proposes applying an Analytic Hierarchy Process (AHP) to determine which industrial process is most appropriate in a given NRHES.
 
-Traditional HES generate energy in the location where it is used \cite {Shin2015, Nixon2012, Adaramola2014, Goodbody2013, McGowan1996}. For example, Shin et al. (2015) optimized meeting the energy needs of the Deokjeok Islands, part of South Korea, which are disconnected from the grid, using renewable power sources and diesel generators. Different approaches for HES as a means of electricity access for people in rural regions or developing nations have been discussed in Borges et. al. (2010) where biogas and photovoltaics (PVs) provide energy to the surrounding region \cite{BorgesNeto2010}. Nixon et. al. (2012) evaluated multiple solar-biomass systems for decentralised power production \cite{Nixon2012}. Adaramola et. al. (2014) used the Hybrid Optimization Model for Electric Renewable (HOMER) computational tool to model a wind and solar HES system in southern Ghana \cite{Adaramola2014}. Rehman et. al. (2010) studied PV-diesel-battery HES for a rural region of Saudi Arabia \cite{Rehman2010}. Mahmoud et. al. (2004) discussed the economic benefits of a PV-diesel generator system hooked up to the electric grid \cite {Mahmoud2004}. The above research describes multiple inputs single output (MISO) systems\cite{Garcia2013}.A significant body of research literature describes off-grid situated hybrid energy systems, demonstrating that HES can provide reliable energy.
+\newpage
 
+
+% --------------------------------------------------------------------------
+% -- Acknowledgements --
+ \frontmattersection{Acknowledgements}
+ \begin{center}
+ 	{\LARGE\textsc{Acknowledgements}}
+ \end{center}
+
+This research would not have been possible without the quick response of the Cyclus team to my frequent questions and concerns.  I would like to thanks Dr. Katy Huff, Dr. Anthony Scopatz, Dr. Paul Wilson ...
+
+Thank you Dr. Borrelli and The University of Idaho for the incredible opportunities I have been afforded while in this program.
+
+On a personal note, I would like to thank my parents, Don Redfoot and Kathy Kenyon, for being so supportive of me.  [AHHHH! Sweet. Thanks!]
+
+\newpage
+
+
+% --------------------------------------------------------------------------
+% -- Dedication --
+% \frontmattersection{Dedication}
+% \vspace*{\fill}
+% \begin{center}
+%   {\LARGE\textsc{Dedication}}
+
+
+% ***  Your dedication. This section is optional, per the handbook. ***
+% \end{center}
+% \vspace{\fill}
+% \newpage
+
+
+% --------------------------------------------------------------------------
+% -- Table of Contents --
+\frontmattersection{Table of Contents}
+\tableofcontents
+\newpage
+
+
+% --------------------------------------------------------------------------
+% -- List of Tables --
+% \frontmattersection{List of Tables}
+% \listoftables
+% \newpage
+
+
+% --------------------------------------------------------------------------
+% -- List of Figures --
+% \frontmattersection{List of Figures}
+% \listoffigures
+% \newpage
+
+
+% --------------------------------------------------------------------------
+% -- List of Code Listings --
+% \frontmattersection{List of Code Listings}
+% \lstlistoflistings
+% \newpage
+
+
+% --------------------------------------------------------------------------
+% -- List of Acronyms --
+% This is useful for those in fields with an excessive amount of acronyms,
+\frontmattersection{List of Acronyms}
+\begin{center}
+	{\LARGE\textsc{List of Acronyms}}
+\end{center}
+
+% Use acronyms in a consistent manner and without spelling mistakes
+%   \acf{cogs}  Full definition of acronym
+%   \ac{cogs}   Regular usage (does the stuff [between braces])
+\begin{acronym}[NRHES]  % Passing an acronym as argument makes other acronyms align with it. This is usually the longest acronym.
+    \acro{cogs}[CoGS]{College of Graduate Studies}
+    \acro{nrhes}[NRHES]{Nuclear Renewable Hybrid Energy System}
+    \acro{vm}[VM]{Virtual Machine}  % Normal version of an acronym. Usage: \ac{vm}
+   % \acrodefplural{vm}[VMs]{Virtual Machines}
+    \acro{npp}[NPP]{Nuclear Power Plant}
+    \acro{epri}[EPRI]{Electric Power Research Institute}
+    \acro{nfcs}[NFCS] {Nuclear Fuel Cycle Simulator}
+    \acro{fom}[FOM]{Figure of Merit}
+    \acro{lcoe}[LCOE]{Levelized Cost of Electricity}
+    \acro{ece}[ECE]{Effective Cost of Electricity}
+     % Plural version of an acronym. Usage: \acp{vm}
+\end{acronym}
+
+
+
+% --------------------------------------------------------------------------
+\mainmatter  % Starts the content part of the thesis
+\setcounter{secnumdepth}{3}  % Sets depth section numbers go to.
+% NOTE !! : There is a bug currently where they will not work at depth of 3, e.g section 1.2.3 will not display, but 1.2 will.
+
+
+
+
+% --------------------------------------------------------------------------
+% -- Introduction --
+\clearpage
+\chapter{Introduction}
+\label{Chapter:Introduction to Nuclear Renewable Hybrid Energy Systems}
+% \acresetall  % Use this if you want acronyms to be fully stated upon first use again, such as in new chapters
+
+As our nation and other nations prepare to meet their respective demands for energy, they are faced with the challenge of addressing five major issues. First, the sources of energy production must produce sufficient energy reliably to meet the demands of growing populations and economies - few countries will sacrifice economic growth for other objectives. Second, the serious threat of climate change due to carbon emissions demands alternatives that can fuel economic growth while minimizing damage to the planet. Third, the sources of energy must be flexible enough to respond to seasonal and hourly fluctuations in demand. Fourth, the sources of energy production must be reasonably safe to the workers who produce the energy and those who consume it. Finally, all of the above objectives must be met through economically viable combinations of energy sources that are affordable.
+No one source of energy has optimized all five of these objectives. Coal-fired energy has fueled the economic growth of most developed nations, producing vast amounts of energy and creating a reliable grid for distributing that energy. But the environmental and safety costs of coal have been enormous, which has led to the search for viable alternatives. Natural gas, the primary affordable alternative, has less particulate pollution but does not reduce carbon emissions. Natural gas power plants, unlike nuclear and coal power plants, were built with flexibility in mind and are the typical load following means of energy production \cite{MITEnergyInitiative2011}. Renewable sources - such as solar, wind and hydro - have grown significantly, but their capacity to generate sufficient energy and respond to fluctuating demand have limited their utility. Nuclear power is clean and reliable, but its affordability and flexibility are issues to address.
+Various ways of integrating non-emitting sources of power, such as solar, wind, and nuclear, provide approaches to addressing the five objectives listed above - reducing greenhouse gas emissions while increasing grid reliability and flexibility. Nuclear Renewable Hybrid Energy Systems (NRHES) are power systems that tightly combine and co-locate different facilities with a nuclear power plant - for example, with a renewable source, a battery, an industrial process, and/or a natural gas plant.  NRHES is a proposed solution that combines the capacity and reliability of a nuclear power plant (NPP) with greater flexibility.  Three ways to achieve greater flexibility without sacrificing reliability include: 1) more flexible production to load follow as with natural gas; 2) greater storage capacity provided through various types of batteries; and 3)  allocation strategies that direct excess heat or electricity to an industrial process when the grid has lower demand. NRHESs focus on the third strategy to create a reliable, flexible system while seeking to minimize emissions to a level significantly less than a renewable source combined with a natural gas plant \cite{Baker2016}.
+Making decisions about investing in nuclear renewable hybrid energy systems to meet future energy demand requires developing rigorous simulations to determine each system's financial viability as well as its technical capacity to provide reliable, clean energy under different geographic, technical, and economic scenarios. In addition, decision-makers need tools that allow them to prioritize the objectives listed above to respond to local needs and policy objectives.
+
+
+To address these issues, this thesis begins with a review of the existing literature covering both nuclear and non-nuclear hybrid energy systems, including a discussion of the ongoing research on modeling nuclear hybrid energy systems to evaluate the important characteristics to include in any model. The paper describes nuclear fuel cycle simulators (NFCS) and analyzes the benefits and drawbacks of using such simulators to model nuclear renewable hybrid energy systems.  Accessibility through using an open source platform and a popular programming language are found to be the primary benefits of using a NFCS. Cyclus is the only open source nuclear fuel cycle simulator.
+The second part of the thesis uses Cyclus's open source structure as well as its flexibility and modular design to develop a preliminary simple NRHES using the nuclear fuel cycle simulator. The design will include a nuclear reactor, a desalination plant, and the grid.  The demand data will be taken from the California ISO website (caiso). The model evaluates the overall usability of Cyclus for modeling a NRHES as well as determines the efficiency benefits of a thermally and electrically coupled industrial process, as opposed to a strictly electrically coupled system.
+Finally, this thesis will discuss the current approaches to quantifying electricity costs and reliability. After analyzing ways of measuring a NRHES, this thesis will propose a decision-making tool for comparing various NRHES designs using an Analytic Hierarchy Process (AHP).  Dimensional Analysis will also be used to determine a unitless value that can measure the dispatchability, safety, emissions, and profitability of a NRHES configuration.CyclusCyclusCyclusCyclus
+\section{Current Grid Challenges}
+In order to ensure grid reliability, defined as consistent electricity supplied to customers with a high penetration of fluctuating sources of power , traditional base load generating sources, such as nuclear power plants, will need to increase their ability to fluctuate output to the electric grid \cite {Denholm2011}. For example, when wind decreases its electricity output, other sources of electricity need to respond quickly to make up for the loss. To supply electricity to a system that includes variable contributing sources, nuclear generation must be able to quickly increase and decrease its grid contribution.
+Reducing energy output below capacity for NPPs is sub-optimal primarily due to economic inefficiency.  \cite{Nuclear2011}. NPPs are almost entirely comprised of fixed and sunk costs. The majority of the costs for nuclear are capital and operations (not including fuel), costs that do not depend on how much electricity is sold. As of 2010, nuclear fuel accounts for about 10\% of the levelized cost of electricity as compared to 70\%-80\% for natural gas \cite{IEA/NEA}. Due to the relatively small role the fuel plays in the overall costs of running an NPP operation, lowering the power output does not greatly reduce the generating costs. Along with the economic considerations, the materials impacts  of fluctuating older nuclear power plants that were not designed for such maneuverability can accelerate the aging of the power plant, causing physical and economic damage \cite{Nuclear2011}. Assuming economic conditions in the energy sector remain constant, NPPs must run at near full capacity to compete economically and avoid materials degradation.
+\chapter{Literature Review}
+The purpose of the literature review is:
+\begin{itemize}
+\item First, evaluate previous approaches to modeling hybrid energy systems;
+\item Second, evaluate what are the necessary functionalities a piece of software needs in order to model a hybrid energy system; and
+\item Third, describe the current modeling approaches being pursued with nuclear hybrid energy systems, with the purpose of providing an overview of the current state of the art.
+\end{itemize}
+
+
+\section{Traditional Hybrid Energy Systems}
+Hybrid Energy Systems (HES) are coupled means of energy generation generally including at least one renewable and one conventional energy source \cite {Ibrahim2011}. These systems provide electricity through multiple generation sources working together unlike co-generation, which is "the simultaneous production of power and usable heat \cite{Rosen2005}." Traditional HES generate only a single product, electricity, from multiple sources. Co-generation creates multiple outputs, such as electricity and heat, from a single energy source. HES have been implemented all over the world in stand-alone and grid connected systems to balance the variability of solar and wind \cite {Garcia2015, Qi2014, Shin2015, Nixon2012, Adaramola2014, Goodbody2013, BorgesNeto2010, McGowan1996}. In standalone systems, the renewable generating source is generally combined with a diesel generator, a battery, or both. The operational goal of all HES is to pair fluctuating energy generation sources with consistent energy producers and/or storage mechanisms in order to have a reliable electrical generating system.
+
+Traditional HES generate energy in the location where it is used \cite {Shin2015, Nixon2012, Adaramola2014, Goodbody2013, McGowan1996}. For example, Shin et al. (2015) optimized meeting the energy needs of the Deokjeok Islands, part of South Korea, which are disconnected from the grid, using renewable power sources and diesel generators. Borges et. al. (2010) discusses different approaches for HES as a means of electricity access for people in rural regions or developing nations where biogas and photovoltaics (PVs) provide energy to the surrounding region \cite{BorgesNeto2010}. Nixon et. al. (2012) evaluated multiple solar-biomass systems for decentralized power production \cite{Nixon2012}. Adaramola et. al. (2014) used the Hybrid Optimization Model for Electric Renewable (HOMER) computational tool to model a wind and solar HES system in southern Ghana \cite{Adaramola2014}. Rehman et. al. (2010) studied PV-diesel-battery HES for a rural region of Saudi Arabia \cite{Rehman2010}. Mahmoud et. al. (2004) discussed the economic benefits of a PV-diesel generator system hooked up to the electric grid \cite {Mahmoud2004}. The above research describes multiple inputs single output (MISO) systems\cite{Garcia2013}. A significant body of research literature describes off-grid situated hybrid energy systems, demonstrating that HES can provide reliable energy for relatively small and local populations.
 
 In contrast to multiple means of energy generation producing one product, multiple input multiple output systems (MIMO) use any excess energy not used by the grid at a given moment to generate other products to increase profitability \cite {Garcia2013}. Figure 1 has been constructed to demonstrate the differences between a system where electricity generation is the sole purpose (MISO) versus a system that produces electricity and another good, such as desalinated water or hydrogen. The sources of energy are gray while the energy sinks are white. Both diagrams differ from co-generation because they illustrate more than one source of energy contributing to the system. The primary benefit of a MIMO system is a diversified income source, thus the system is better economically shielded from fluctuations in electricity prices. Both types of systems attempt to provide reliable energy to the grid while incorporating a fluctuating source of energy.
 
- While the current microgrid hybrid energy system tools, such as HOMER, should be evaluated when determining the characteristics for a NRHES model, there are major differences between small, home-owner projects, and large industrial scale projects. The large industrial scale projects require more thorough physics models, especially when they are including an industrial process. There has been significant research done on small scale MISO HES.  There has been less work done on a large HES which has a major goal of functioning as a backup source to a fluctuating renewable. The focus of this paper is exclusively on the large HES.
-
- \begin{subfigures}
-\begin{figure*}[h!]
-\centering
-\includegraphics[width=.75\textwidth]{TraditionalHES.PNG}
-\caption{\small \sl Traditional HES are smaller systems meant to provide power at the location where the electricity is made.  They have traditionally balanced fluctuating sources of power with reliable sources of electricity.}
+\begin{figure*}
+\includegraphics[width=\textwidth]{MISO_MIMO.png}
+\caption{\small \sl This figure compares the MISO and MIMO configurations, demonstrating the differences between traditional hybrid energy systems that are focused on generating reliable electricity and non-traditional hybrid energy systems, which have the added objective of generating an additional product.  While many of the elements are the same, the MIMO system includes an Industrial Process  that is either thermally or electrically coupled.}
 \end{figure*}
 
-\begin{figure*}[h!]
-\centering
-\includegraphics[width=.75\textwidth]{MIMO_HES.PNG}
-\caption{\small \sl Figures 1a and 1b compare the MISO and MIMO configurations demonstrating the differences between traditional hybrid energy systems that are focused on generating reliable electricity and non-traditional hybrid energy systems which have the added objective of generating an additional product.  While many of the elements are the same, the MIMO system includes an industrial process which is either thermally or electrically coupled.}
-\end{figure*}
-\end{subfigures}
+\section{Nuclear Renewable Hybrid Energy Systems}
+Nuclear Renewable Hybrid Energy Systems (NRHES) are defined by Bragg-Sitton et al. (2014) as the "tighter coupling of nuclear and renewable energy sources in a manner that better optimizes energy use for the combined electricity, industrial manufacturing, and transportation sectors capable of apportioning thermal electrical energy to first meet the grid demand (with appropriate power conversion systems), then utilizing excess thermal and, in some cases, electrical energy to drive a process that results in an additional product \cite {Bragg-Sitton2014}".  The benefits to the participants of the NRHES that co-locate their facilities include minimizing systemwide costs to the NRHES while increasing economic resilience by diversifying both the means of generating energy as well as the products produced. For example, if natural gas prices increase, the NRHES could rely less on the natural gas plant and put more focus on storage.  If short-term electricity prices are negative, the energy produced by the NRHES can be diverted to the industrial process.
 
-\subsection{Nuclear Renewable Hybrid Energy Systems}
+The additional industrial products include, but are not limited to: synthetic fuel, titanium, desalinated water, hydrogen, aluminum, and heat pumps \cite{Bienvenue2015}. The NPP diverts the energy it generates between the grid and the industrial process to maximize profit. The system can allocate energy based on the market value of each of the multiple outputs produced. In the case of a NPP coupled with a desalination plant, for example, if the price of electricity is low, more thermal and/or electric energy can be diverted to generate more clean water at a higher profit \cite {Chen2016}. The costs of running a dynamic system, such as the case with a NRHES, include additional wear and tear, decreased thermal efficiency  due to variability, and increased complexity of operations  \cite{Garcia2013}. The total net costs of the system, such as meeting regulatory expectations , have yet to be determined.
 
-A Nuclear Renewable Hybrid Energy System (NRHES), as defined by Bragg-Sitton et al. (2014) is the "tighter coupling of nuclear and renewable energy sources in a manner that better optimizes energy use for the combined electricity, industrial manufacturing, and transportation sectors capable of apportioning thermal electrical energy to first meet the grid demand (with appropriate power conversion systems), then utilizing excess thermal and, in some cases, electrical energy to drive a process that results in an additional product \cite {Bragg-Sitton2014}".  One potential benefit of co-locating the various facilities in the NRHES is optimizing the system to minimize cost to the NRHES as a whole while increasing economic resilience by diversifying both the means of generating energy as well as the products produced. For example, if natural gas prices increase, there could be less reliance on the natural gas plant and more focus on storage.  On a more short term perspective, if electricity prices are negative, the energy produced by the NRHES can be diverted to the industrial process. Other benefits include decarbonizing both the electric grid as well as industrial processes through the coupling with the nuclear power plant. Furthermore a NRHES is both a flexible and reliable system increasing the overall flexibility and reliability of the grid as a whole.
+\section{Ongoing Modeling Research}
+There have been no physical demonstrations to date of NRHES. Therefore, research has largely focused on computational modeling to determine the feasibility and optimization of coupling elements \cite{Rabiti2015, Boardman2013, Shropshire2012}. Our literature review revealed that much of the work on NRHES is in the design and analysis stage \cite{Epiney2016, Boardman2013, Shropshire2012}. Research has focused on developing models that can dynamically simulate the contributions of variable energy sources, the constraints of fluctuating electricity demand, and thermal/electrical power demands for various industrial processes. The models focus on answering questions regarding minimizing the cost of electricity and ensuring profitability for each of the components comprising the NRHES. In order to move forward with development of any NRHES, such systems must demonstrate that they can be profitable and can reliably respond to fluctuating electricity production and demand \cite{Rabiti2015}.
 
-While there are definite benefits of a NRHES, there are clear challenges to implementation. The main drawback of co-locating the various generation sources and the industrial processes is the increased complexity of the system.  While there are cases of thermal coupling of nuclear power plants internationally; in Norway, Switzerland, Germany, and Canada \cite{Verfondern};  there have never been any nuclear thermal couplings thus far in the United States.  The low level state of development as well as the lack of experimental data in the United States suggest a demand for rigorous technical work.  There are concerns surrounding the regulatory oversight with a thermally coupled NRHES and whether it falls under the Nuclear Regulatory Commission's umbrella. There are multiple economic concerns. A NRHES would need contracts that ensure all of the participants in the NRHES are profitable if the system as a whole is profitable. Further policy and economics investigations need to analyze when running the NRHES in an economically optimal way is considered market manipulation. So, while there are motivations to analyze the benefits of a NRHES, those benefits always need to be analyzed with the context of the major economic, technical, and excess overhead costs also associated with a complex interconnected system.
+An ongoing effort at Idaho National Laboratory (INL), Argonne National Laboratory (ANL), and Oak Ridge National Laboratory (ORNL) focuses on modeling a generic NRHES to optimize the size of the components as well as the overall functioning of the system. The generic nature of the plant means that regional variability in the renewable energy produced as well as the costs of the feedstocks for each of the systems is not taken into consideration. The generic model will test the economic viability of NRHES to determine if future development should be pursued. The industrial plant combines a nuclear power plant, a wind farm, a natural gas power plant, a battery, and a high temperature steam electrolysis hydrogen production facility. More component models will be developed in the future that can compare various industrial customers\cite{Harrison2016}. The chosen renewable source, a wind farm, models a highly stochastic system due to the unpredictable nature of wind generation \cite{Chen2016_wind}. The model optimizes the sizes of the nuclear power plant, the natural gas plant, and the battery. The model performs two optimizations, the first on the size of the components and the second optimizing the functioning of the system to minimize costs \cite{redfoot_rabiti_2018}. The objective is to choose the NRHES configuration that minimizes costs while meeting set emissions and grid reliability expectations.
+\section{Computational Tools}
+NRHES sit in an interesting location in computational modeling. There are many tools to model and optimize non-nuclear hybrid energy systems (HOMER, Hybrid2, SOLSIM, SOMES, ARES, RAPSIM, HOGA) \cite {Bernal-Agustin2009}. These programs generate mass flow and calculate electricity output and the possible output of another product, such as hydrogen. Modelica and Excel, while neither specifically HES nor NRHES tools, have been used to model both nuclear and non-nuclear hybrid energy systems \cite{Shropshire2012, Chen2016, Binder2014, Garcia2015, Epiney2016}. HES tools are typically bought (or developed?) for microgrid standalone systems. The main challenges to applying HES systems to a NRHES are the scale of the system being modeled and fluctuating grid demand.
+\section{NRHES Models}
+Selecting a tool to model a NRHES requires understanding what characteristics a model must possess in order to provide accurate information. For example, as discussed below, it is important for a NRHES model to incorporate the dynamic nature of the system in order to include losses from the fluctuations in the system. Understanding the differences among the underlying mathematical models as well as the software functionality is essential in determining whether and how a nuclear fuel cycle simulator (NFCS) will be useful to NRHES modeling.
+As mentioned above, the model currently under development by Oak Ridge National Laboratory, Argonne National Laboratory, and Idaho National Laboratory has reviewed the essential characteristics for a computational model of NRHES. Rabiti et al. (2015) discusses the important elements of a NRHES computational model in detail, describing the basic requirements of the software as a "computational representation of the thermal, mechanical, chemical, and electrical processes in the systems as process units, reactors, manufacturing plants, and energy delivery (to the appropriate point of interface with the market transaction, such as an electricity bus, or a product depot or distribution terminal where a commodity price is established)"\cite{Rabiti2015}. The model in development by the national laboratories combines RAVEN (Reactor Analysis and Virtual Control Environment) for the stochastic and statistical aspects of the system, such as generating synthetic wind data and optimizing the systems with Modelica for modeling the various components in the NRHES.
+\section{RAVEN}
+The RAVEN tool was initially built for probabilistic risk assessment. As a probabilistic tool, RAVEN is "able to perform parametric and stochastic analysis based on the response of complex system codes\cite{RabitiRAVEN}." For example, RAVEN can run thousands of different wind energy generation paths to produce a statistically fair representation of how wind power would likely function over any given hour. RAVEN can also generate generic seasonal wind generation over a week. The week long synthetic wind data for summer, winter, and fall/spring can then be extrapolated to represent the whole season, which, in turn, can be extrapolated to represent however long of a time frame is desired to run the NRHES simulation. While the current goal is to create a generic model, it can be tailored to specific regions, defining the costs of inputs such as water and natural gas based on the typical regional price, as well as selling the electricity for the current regional rate. Using synthetic generated data instead of historic data avoids the critique that the model only represents past behavior and is thus inapplicable to future trends \cite{redfoot_epiney_2016}. RAVEN is also used to determine high-risk time series samples to ensure that high risk scenarios are accounted for when desired in a study. In addition, RAVEN can calculate the loss of load probability and the sensitivity to uncertainty analysis due to the figures of merit reliance on a probabilistic approach.
 
-The additional products include, but are not limited to: synthetic fuel, desalinated water, hydrogen production, metals production, and heat pumps \cite{Bienvenue2015}. The nuclear power plant diverts the energy it generates between the grid and the industrial process to maximize profit or minimize costs. The system can allocate energy based on the market value of each of the multiple outputs produced. In the case of a nuclear power plant coupled with a desalination plant, for example, if the price of electricity is low, more thermal and/or electric energy can be diverted to generate more clean water at a higher profit \cite {Chen2016}. The costs of running a dynamic system, such as the case with a NRHES, include additional wear and tear, decreased thermal efficiency, and increased complexity of operations \cite{Garcia2013}. While there is ongoing economic research into NRHES, the total costs of any particular system have yet to be determined \cite{Rabiti2015}.
+\section{Dynamic Modeling}
+Garcia et. al. (2013) and Du et. al. (2014) apply dynamic approaches to modeling hybrid energy systems (HES) to appropriately address the impacts of flexible operation of the system due to variable renewable generation \cite{Garcia2013, Du2014}. In Du et. al. (2014). Two optimization problems are addressed: the first minimizes variability in the HES through optimizing components of the HES system, and the second imposes operating and capital costs on the design variables. Garcia et. al. (2013) has a two-part series. The first applies and analyzes performance of a dynamic approach to modeling some of the physical components of a traditional and an advanced (which produces goods besides electricity) HES. The second paper focuses on economic effects using a dynamic approach, as opposed to time series or statistical analysis. Overall, both parts of the series focus on how a dynamic approach better models the high level of variability of a HES for output generation and profitability maximization \cite{Garcia2013}.
+The costs of operating in a flexible manner, dynamically allocating resources between multiple coupled systems, are substantial enough to require a simulation that models the variability of the system at a high fidelity \cite{Garcia2013, Shropshire2011, Locatelli2015}. The dynamic modeling at this point focuses on the dynamic transfer of energy to different sources, and how this transfer impacts the economics and grid reliability. The dynamic allocation of the heat and electricity depending on the renewable generation and the grid demand is an essential characteristic of an NRHES.  Including factors such as how quickly the NRHES will be able to switch between providing energy to the industrial facility and the grid will impact determining whether a NRHES is worth pursuing.  To account for the dynamic nature of the system, NRHES requires either a continuous dynamic model or a high fidelity discrete  model with a very short time step, in the range of an hour at worst, and preferably in the minute scale.
+\section{Modelica}
+Modelica is a widely used open source language for modeling large and complex systems composed of smaller component models. It is particularly optimized for modeling dynamic systems, making it an attractive language for an NRHES. Modelica has powerful libraries, such as Thermopower, that include the thermalhydraulic modeling tools required for modeling mass flows in energy systems \cite{Binder2014}. The language is well-maintained, giving it the added benefits of having up-to-date documentation and a community that can provide support. Typically, Modelica is run on the Dymola developer environment, a private tool developed by the creator of Modelica, Dr. Hilding Elmquist. Another option for running the Modelica language is the open source OpenModelica environment.
 
-There have been no physical demonstrations to date of NRHES. Therefore, research has largely focused on computational modeling to determine the feasibility and optimization of coupling elements \cite{Boardman2013, Shropshire2012}. Creating a model for a NRHES is important for determining technical as well as economic optimization of the elements that could comprise such systems. Models are used as a means for forecasting limitations and functionality in specific conditions in order to ensure safety and reliable electricity production. Computational models can provide feedback regarding which NRHES models are worth pursuing given the expected profitability. A NRHES simulator could help inform policy and technology decisions.
+The Modelica HES model developed in Binder et. al. (2014) includes a nuclear reactor, two steam cycles, a chemical plant, and an electrical component \cite{Binder2014}. The products of this Modelica NRHES model are synthetic fuel and electricity. The model includes the ramp up stage when the reactor initially starts or increases from a lower load. The steam generator connected to the NPP determines which of its turbines to use depending on electricity demand, the 60\% turbine, the 30\% turbine, or the 15\% turbine, which can be used in unison if there is a high demand for electricity. A pressure relief valve releases excess energy unused by the turbines. The wind generation is modeled using the Western Wind dataset from the National Renewable Energy Laboratory (NREL) for an unspecified region in Idaho. Each component in the model was tested individually before being combined. Using the individual component models, verifications were made for the system as a whole. The startup transient state of the model took much greater computation time due to the complex interrelations of the components. Generally, to run a model of a NRHES, including using Modelica, requires a control algorithm, a differential equation that controls how the dynamic system allocates heat. The profitability control algorithm can be adjusted to incorporate varying parameters such as the price of electricity or the cost of natural gas. The study concluded that Modelica is an effective tool for dynamically modeling a HES due to its ability to evaluate control algorithms.
 
-Our literature review revealed that a lot of work on NRHES is in the design and analysis stage \cite{Boardman2013, Shropshire2012}. Research is focused on developing a model that can dynamically simulate the contributions of variable energy sources, the constraints of fluctuating electricity demand, and thermal/electrical power demands for various industrial processes. The models focus on answering questions regarding minimizing costs for each of the components comprising the NRHES. In order to move forward with development of any NRHES,  such systems must demonstrate that they can be profitable and can reliably respond to fluctuating electricity production and demand \cite{Rabiti2015}.
-
-An ongoing effort at Idaho National Laboratory (INL), Argonne National Laboratory (ANL), and Oak Ridge National Laboratory (ORNL) focuses on modeling a generic NRHES.As part of this study, we have gained from some input from INL researchers in the hybrid energy system division who are leading experts in the field. The generic model will test the economic viability of a NRHES to determine how future development should be pursued. The industrial plant combines a nuclear power plant, a wind farm, a natural gas power plant, a battery, and a high temperature steam electrolysis hydrogen production facility. More component models will be developed in the future that can allow for the comparison of various industrial customers\cite{Harrison2016}. The chosen renewable source, a wind farm, models a highly stochastic system due to the unpredictable nature of wind generation \cite{Chen2016_wind}. The model optimizes the sizes of the nuclear power plant, the natural gas plant, and the battery. The objective is to choose the NRHES configuration that minimizes costs while meeting set emissions and grid reliability expectations.
-
-NRHES sit in an interesting location in computational modeling. Many tools have been developed to model nuclear reactors and the nuclear fuel cycle as demonstrated in the nuclear fuel cycle simulators shown in Figure 2. Many tools have also been created to model and optimize non-nuclear hybrid energy systems (HOMER, Hybrid2, SOLSIM, SOMES, ARES, RAPSIM, HOGA)\cite {Bernal-Agustin2009}. Modelica and Excel, while neither are specifically HES or NRHES tools, have been used to model both nuclear and non-nuclear hybrid energy systems \cite{Shropshire2012, Chen2016, Binder2014, Garcia2015, Epiney2016}. HES tools are typically bought for microgrid standalone systems. The main challenges to applying HES software to a NRHES are the scale of the system being modeled and including the grid demand. Small microgrid systems do not include large industrial processes which require thorough physics models.
-
-\section{State of the Art}
-There are criteria that make a tool better for modeling a NRHES. In order to select a tool to model a NRHES, it is necessary to understand what characteristics a model must possess in order to provide accurate information. For example, as discussed below, it is important for a NRHES model to incorporate the dynamic nature of the system. Understanding the differences among the underlying mathematical models as well as the software functionality is essential in determining whether and how a nuclear fuel cycle simulator (NFCS) will be useful to NRHES modeling.
-As mentioned above, the model currently under development by the Oak Ridge National Laboratory, the Argonne National Laboratory, and the Idaho National Laboratory has reviewed the essential characteristics for a computational model of a NRHES. Rabiti et al. (2015) discusses the important elements of a NRHES computational model in detail, describing the basic requirements of the software as a "computational representation of the thermal, mechanical, chemical, and electrical processes in the systems as process units, reactors, manufacturing plants, and energy delivery (to the appropriate point of interface with the market transaction, such as an electricity bus, or a product depot or distribution terminal where a commodity price is established)"\cite{Rabiti2015}. The model in development by the national laboratories combines RAVEN (Reactor Analysis and Virtual Control Environment) for the stochastic aspects of the system and Modelica for modeling the various components in the NRHES.
-
-\subsection{Modelica}
-Modelica is a widely used open source language for modeling large and complex systems composed of smaller component models. It is particularly optimized for modeling dynamic systems. Modelica has powerful libraries, such as Thermopower, that include the thermohydraulic modeling tools required for modeling mass flows in energy systems \cite{Binder2014}. The language is well-maintained, giving it the added benefits of having up-to-date documentation and a community that can provide support. Typically Modelica is run on the Dymola developer environment, a private tool developed by the creator of Modelica, Dr. Hilding Elmquist. Another option for running the Modelica language is the open source OpenModelica environment.
-
-A Modelica HES model developed in Binder et. al. (2014) includes a nuclear reactor, two steam cycles, a chemical plant, and an electrical component \cite{Binder2014}. The products of this Modelica NRHES model are synthetic fuel and electricity. The model includes the ramp up stage when the reactor initially starts or is increasing from a lower load. The steam generator connected to the NPP determines which of its turbines to use depending on electricity demand, the 60\% turbine, the 30\% turbine, or the 15\% turbine, which can be used in unison. A pressure relief valve releases excess energy unused by the turbines. The wind generation is modeled using the Western Wind dataset from the National Renewable Energy Laboratory (NREL) for an unspecified region in Idaho. Each component in the model was tested individually before being combined. Using the individual component models, verifications were made for the system as a whole. The startup transient state of the model took much greater computation time due to the complex interrelations of the components. Generally, running a model of a NRHES in Modelica requires a control algorithm, a differential equation that controls how the dynamic system allocates heat. The profitability control algorithm can be adjusted to incorporate varying parameters such as the price of electricity or the cost of natural gas. The study concluded that Modelica, due to its ability to evaluate control algorithms, is an effective tool for dynamically modeling a HES. As a tool that is optimized for large dynamic systems, Modelica has been used more than any other tool to model NRHES at this point.
-
-\subsubsection{RAVEN}
-The RAVEN tool was initially built for probabilistic risk assessment. RAVEN, as a probabilistic tool, can do parametric and stochastic analyses of systems\cite{RabitiRAVEN}. For the NRHES, RAVEN is used to run different wind energy generation paths in order to generate a statistically fair representation of how renewables, in this case wind power, would likely function over any given hour. RAVEN can be used to generate the most generic seasonal wind generation over a week. A typical week can be extrapolated to represent a given season. The process can be repeated over the different seasons, which can be extrapolated to represent a year. Using synthetic generated data instead of historic data avoids the critique that the model only represents past behavior and is thus inapplicable to future trends \cite{redfoot_epiney_2016}. RAVEN can also be used to determine high-risk time series samples to ensure that high risk scenarios are accounted for in the study. RAVEN can also do probabilistic assessments such as loss of load probability and sensitivity to uncertainty analysis.
-
-From our literature review, we conclude that any future modeling efforts for a NRHES would benefit from complimenting the ongoing modeling effort. Currently, all of the physics models for the NRHES are built in Modelica. To benefit from the work already done, any additional software would need to be able to easily communicate with the Modelica modeling language.  The model would benefit from a tool that would communicate with other chemical and utility standard physics modeling tools. Future work would benefit from coupling with other physics modeling tools, allowing groups to take advantage of the existing infrastructure while using their physics model of choice.
-
-\subsection{Distinct Capabilities}
-There are certain characteristics of a physical NRHES which a computational model would need to have to be a reasonable assessment of the system as a whole. Table I below demonstrates the functions which are most commonly incorporated in a model. We discuss dynamic modeling explicitly as it is the capability highly valued in a NRHES that is not nearly as important in a NFCS. The below discussion details the extensive work that has been done determining why a dynamic system is important to a NRHES.
-
-In Garcia et. al. (2013) and Du et. al. (2014), a dynamic approach to modeling hybrid energy systems (HES) is applied in order to appropriately address the impacts of flexible operation of the system due to variable renewable generation \cite{Garcia2013, Du2014}. In Du et. al. (2014), two optimization problems are addressed: the first minimizes variability in the HES through optimizing components of the HES system, and the second imposes operating and capital costs on the design variables. Garcia et. al. (2013) has a two-part series. The first applies and analyzes performance of a dynamic approach to modeling some of the physical components of a traditional and an advanced (produces goods besides electricity) HES. The second paper focuses on economic effects using a dynamic approach, as opposed to time series or statistical analysis. Overall, both parts of the series focus on how a dynamic approach better models the high level of variability of a HES for output generation and profitability maximization \cite{Garcia2013}. The costs of operating in a flexible manner, dynamically allocating resources between multiple coupled systems, are substantial enough to require a simulation that precisely models the variability of the system \cite{Garcia2013, Shropshire2011, Locatelli2015}. The dynamic modeling at this point focuses on the dynamic transfer of energy to different sources, and how this impacts the economics and grid reliability. The physical impacts of the grid system have not yet been included in the model \cite{Harrison2016}.  The dynamic allocation of the heat and electricity depending on the renewable generation and the grid demand is an essential characteristic of a NRHES.  Including factors such as how quickly the NRHES will be able to switch between providing energy to the industrial facility and the grid will impact determining the economic and physical values of the model.
-
-Table I displays the characteristics routinely included in modeling a NRHES along with their citations.
+\section{Small Modular Reactors}
+For completeness, the use of small modular reactors both as tools for load following and as sources of process heat must be addressed. SMRs are generally defined as nuclear reactors under 300 MWe. SMR designs, such as the one in development by NuScale, combine multiple small reactor modules. Multiple SMRs in combination are a promising possibility for NRHES.  With multiple reactors, individual modules can be assigned to meet the industrial process energy demand, with others solely used for electricity generation. Furthermore, as electricity demand grows, additional modules can be added to the industrial park. Multiple SMRs have a clear means of load following, simply by shutting down those reactors whose energy output is not required due to seasonal shifts and other demand factors. The modularity of the SMRs allows greater flexibility in the design of the industrial park.  Locatelli (2015) discusses the technical and economic feasibility of load following using multiple small modular reactors (SMRs), applying the excess energy toward generating algae-biofuel and desalinated water \cite{Locatelli2015}. He discusses the benefits as well as drawbacks of an NRHES that includes a thermal desalination process. A desalination plant has the benefits of switching between a latent and producing state and generating a product that is readily stored. The main drawback is poor water quality and output level when the desalination unit restarts.
+\subsection{Other Research on NRHES Models}
+Many more studies on HES and NRHES incorporate economic and technical modeling, but the essential characteristics of ability to model a dynamic and stochastic system have been covered. Some other relevant studies include:
+\begin{itemize}
+\item Shropshire et. al. (2012) does not focus on HES, but discusses how different models of flexible and small modular reactors could integrate into the European energy market with growing renewable generation, thus fulfilling the growing need for flexibility and load following in other electricity suppliers \cite{Shropshire2012}.
+\item Shropshire et. al. (2011) develops target cost estimates for reactors given certain economic environments based on competing technology energy costs \cite{Shropshire2011}.
+\item NEA-OECD (2011) presents an overview of the capability of implemented newer and older nuclear power plants to load follow \cite{Nuclear2011}.
+\item Baker (2016) analyzes the levelized cost of electricity (LCOE) as the figure-of-merit (FOM) and the role of battery storage to evaluate different NRHES scenarios \cite{Baker2016}
+\item Kazimi et al. (2009) produces a preliminary dynamic analysis of two NRHES systems that have high levels of renewable energy generation and multiple outputs from the system. The study concludes that NRHES could lead to optimized energy use, reduced carbon, favorable economic performance, and flexible operation time \cite{Kazimi}.
+\item Forsberg et. al. (2009) discusses using nuclear power to create more liquid transportation fuels from biomass and fossil fuel sources \cite{Forsberg2009}.
+\item There have also been two regional modeling studies done on Texas and Arizona focused on including regional characteristics to determine the renewable used and the industrial process.
+\end{itemize}
+Table I displays the characteristics routinely described as necessary to model a NRHES along with their citations.
 
 \begin{table}[h!]
 \centering
-\caption{References for Each NRHES Model Function}
+\caption{References for Each NRHES Characteristic}
 \begin{tabular}{ ||c | c|| }
  \hline
- NHRES Model Function & Paper \\ [0.5ex]
+ NHES Characteristic & Paper \\ [0.5ex]
  \hline \hline
  Dynamic & \cite{Garcia2013, Du2014, Kazimi, Garcia2016}\\
  \hline
@@ -188,71 +325,224 @@ Table I displays the characteristics routinely included in modeling a NRHES alon
 \label{table:1}
 \end{table}
 
-The table displays the characteristics found most commonly in the NRHES literature review.  The six characteristics are beneficial to modeling the important physical characteristics as well as indicators of successful implementation of a NRHES.  Each of these characteristics have been included in previous studies, and thus have some already proposed approaches.  The characteristics can be studied in greater detail in order to determine if they satisfactorily model the system.
-
+The table displays the characteristics that arise as a pattern in many of the documents.  The six characteristics included in the table are those likely necessary for a NRHES model.  Each of the characteristics has been included in previous studies, and thus has some already proposed approaches.  The characteristics can be studied in greater detail in order to determine if they satisfactorily model the system. A NFCS would need to find a way to appropriately include these characteristics.
 \section{Nuclear Fuel Cycle Simulators}
-
-This section identifies basic properties of nuclear fuel cycle simulators and assesses their distinct capabilities. Figures 2a and 2b display many of the currently used NFCSs. The fuel cycle simulators are the central nodes in these figures, with the tools for computing some of the basic descriptive qualities of a fuel cycle branching off. The computational attributes that are often included in a NFCS include: mass flows, reactor physics, thermal hydraulics, reprocessing, waste management, risk management, and economics. While different NFCSs were initially optimized for a variety of applications, there is a lot of overlap in their functionality \cite {Guerin2009}. Because NFCSs are attempting to model the same thing, the nuclear fuel cycle, the models include some means of tracking the fuel composition as they move through the fuel cycle. The different fuel cycle simulators generally have the ability to simulate fleets of nuclear reactors with the associated fuel cycle. As can be seen in figues 2a and 2b, there are a good number of NFCSs which all have different functionality and dependencies.
-
-\begin{subfigures}
+The common uranium nuclear fuel cycle describes the system of mining uranium, converting the uranium to gaseous $UF_6,$ enriching the uranium with higher percentages of U235, fabricating the fuel, the fuel changing in the reactor, storing, reprocessing, and final disposal. There are different fuel cycles, depending on the type of fuel used, the reactors included, and how the spent fuel is managed. Nuclear fuel cycle simulators model the fuel cycle determining the likely quantity and characteristics of nuclear fuel in order to determine future policies surrounding management of the spent fuel.
+This section identifies basic properties of nuclear fuel cycle simulators and assesses their distinct functionality. Figures 2a and 2b display many of the currently used nuclear fuel cycle simulators (NFCS). The fuel cycle simulators are the central nodes in these figures, with the tools for computing some of the basic descriptive qualities of a fuel cycle branching off. The computational attributes that are often included in NFCS are: mass flows, reactor physics, thermal hydraulics, reprocessing, waste management, risk management, and economics. While different fuel cycle simulators were initially optimized for a variety of applications, there is a lot of overlap in their functionality \cite {Guerin2009}. Because nuclear fuel cycle simulators are attempting to model the same thing, the nuclear fuel cycle, the models include some means of tracking the isotopic makeup of the fuels as they move through the fuel cycle. The different fuel cycle simulators generally have the ability to simulate fleets of nuclear reactors with the associated fuel cycle industrial processes and nuclear materials storage. As can be seen in figures 2a and 2b, there are a good number of NFCS, which all have different functionality and dependencies.
+%\begin{subfigures}
 \begin{figure*}
-\includegraphics[width=\textwidth]{NFCS_US.PNG}
-\caption{\small \sl This figure displays the nuclear fuel cycle simulators developed in the United States, though they are not necessarily specifically built to demonstrate the development of a US fuel cycle. This figure does not include all nuclear fuel cycle simulators or their dependencies.  The figure demonstrates some of the complexity of the current Nuclear Fuel Cycle Simulator options. The figure demonstrates the types of tools NFCSs depend on, thereby suggesting some of their functionality.}
+\includegraphics[width=\textwidth]{US_FUEL_TOOLS.png}
+\caption{\small \sl This figure displays the nuclear fuel cycle simulators developed in the United States, though they are not necessarily specifically built to demonstrate the development of a US fuel cycle. This figure does not include all nuclear fuel cycle simulators or their dependencies.  The figure demonstrates some of the complexity of current Nuclear Fuel Cycle Simulator options. The figure demonstrates the types of tools NFCSs depend on, thereby suggesting some of their functionality.}
 \end{figure*}
 
 \begin{figure*}
-\includegraphics[width=\textwidth]{NFCS_non_us.PNG}
-\caption{\small \sl This figure displays the nuclear fuel cycle simulators developed outside of the United States.The full relationship between the various computational tools may not be covered.  The literature is lacking in descriptions of the evolution and dependencies of the computational tools.}
+\includegraphics[width=\textwidth]{Non-US_FUEL_TOOLS.png}
+\caption{\small \sl This figure displays the nuclear fuel cycle simulators developed outside of the United States. The full relationship between the various computational tools may not be covered.}
 \end{figure*}
-\end{subfigures}
+%\end{subfigures}
+In the case of the once-through fuel cycle, uranium is mined, enriched for a higher concentration of U-235, molded into fuel assemblies, and used in a nuclear reactor for between 36 and 72 months. The spent fuel is not reprocessed, so it is first stored on site in spent fuel pools, then canisters. Eventually, the spent fuel will be deposited in a deep geologic repository. More advanced fuel cycles involve different degrees and methods of used fuel reprocessing. Nuclear fuel cycle simulators permit modeling of new techniques applied to all parts of the nuclear fuel cycle; from the mining through the waste management. The idea behind modeling the full nuclear fuel cycle is to optimize the fuel cycle given technical, environmental, regulatory, and economic constraints.
 
-The major difference between many of these nuclear fuel cycle simulators is the ability to model discrete facilities and fuel batches versus modeling continuous mass flows throughout the fleet of facilities operating in an identical fashion. In the case of the fleet modeling, the average value for each of the facilities is assumed. The discrete model requires more information while providing a more detailed analysis. The discrete model is, however, more computationally complex and expensive.
-
-In "Modeling the Nuclear Fuel Cycle," Juchau et al. (2010) describe four functions as necessary for a NFCS to meet the desired qualities of an organization proposed at the time called the Simulation Institute for Nuclear Enterprise Modeling and Analysis \cite{Juchau2010}. The four functions, which are reiterated in other synopsis of Nuclear Fuel Cycle Simulators \cite{Wilson2012, NEA2012} include: discrete facilities and material tracking, uncertainty analyses, ability to optimize, and open and accessible with high quality documentation to ensure collaboration. Juchau et al. (2010) reviews the nuclear fuel cycle simulator tools CAFCA, COSI, CEPMNFC, DANESS, NFCSim, VEGAS, VISION, NFCSS, and GENIUS 1. His conclusion is that many of these tools have overlapping functionalities, partially due to the proprietary nature of at least parts of each.
-
-One of the reasons why there are so many nuclear fuel cycle simulators is that many of the countries that currently have NPPs have designed their own simulators. While some NFCSs, such as DANESS, are used in multiple countries, many countries have developed their own NFCSs.  DANESS can be seen in figures 2a and 2b as it has been developed and used both in and out of the US. Figure 2b depicts the non-US NFCSs along with some of their software dependencies. Most of the fuel cycle simulators are not open source or available for download; thus, each nation tends to have proprietary software. As discussed with University of Illinois Professor and developer of the Cyclus nuclear fuel cycle simulator, Dr. Kathryn D. Huff, it is also often more efficient, both in terms of time spent as well as better integration, if the different functions are designed by the same team (\cite{redfoot_huff_2016}). Integrating components from one system into a new system can often be more challenging than building the function from scratch. While sharing code can be challenging amongst various program, some calculations or libraries are commonly used by NFCSs. For example, Figure 3 depicts EVOLCODE, FUTURE, and FAMILY21 as all relying on Origen.
-
-The 2016 Electric Power Research Institute report "Program on Technology Innovation: Assessment of Nuclear Fuel Cycle Simulation Tools" takes a commercial software architecture approach to analyze sixteen NFCSs.  The NFCSs are evaluated based on functionality, usability, reliability, performance, and supportability. Of the sixteen NFCSs included, only six NFCSs garnered responses: CAFCA, COSI6, CYCLUS, DANESS, ORION, and VISION. As is true with other NFCS Benchmarking papers, the EPRI report used feedback from users of the NFCS \cite{EPRI2016}.  The data in the report is anonymous, making it difficult to distinguish which of the NFCSs particularly stood out for each of the categories. The overall approach of analyzing the software based on commercial software architecture criteria, with many subcriteria, is an important assessment for the adoption of the tool by end users. Some of the criteria the end users involved in the survey viewed as being helpful included: parallel processing, open-source, the flexibility to model complex scenarios, uncertainty/sensitivity analysis, economic capabilities, visual tools, and ability to track many nuclides.
-
-The Nuclear Energy Agency's 2012 report "Benchmark Study on Nuclear Fuel Cycle Transition Scenarios Analysis Codes" compares nuclear fuel cycle simulators in three scenarios: light water reactors with direct spent fuel disposal, reprocessing light water reactor fuel, and the transition between light water reactors and fast reactors \cite{NEA2012}. The NFCs included in the study include COSI6, DESAE2.2, EVOLCODE2.0, FAMILY21, and Vision2.2. The benchmark focused on the common characteristics of each of the codes to determine the similarity of the outcomes when modeling the same scenarios. Depletion values of heavy element material flows are directly compared between the simulators, with numerical data included in the report. The Benchmark study concludes that some of the key differences between the various NFCSs include the ability to model discrete batches of fuel as opposed to annually averaged batches, with increased complexity the outcomes between the various NFCSs diverge more, and the different simulators use different physics models for decay and depletion calculations. This report focuses on determining the differences in the outcomes when modeling the same system, so it really evaluates the fuel characterization and depletion abilities of the NFCSs. This benchmark does not focus on the differences in capabilities between the NFCSs, such as economic modeling capabilities or a visual tool.
-
-
-From the literature reviewed and figures 2a and 2b, nuclear fuel cycle simulators have certain common characteristics. Generally, there is a means of tracking the nuclear fuel materials and the composition of those materials using an associated decay software. NFCSs should generally be flexible and able to include new components, able to incorporate other pieces of software, able to do an uncertainty analysis, and accessible to technical and non technical audiences alike. Some of the characteristics discussed as applying to a NFCS also apply to a NRHES as will be discussed in the following section.
-
-\section{Analysis}
-The underlying structure of passing materials between various facilities is similar enough between nuclear materials in a fuel cycle and heat or electricity flow in a NRHES that a NFCS could model a nuclear renewable hybrid energy system. In the case of a NRHES model, the facilities are the NPP, the renewable, and the industrial process at least.  In the case of the nuclear fuel cycle, the facilities are the steps in the given fuel cycle. Noting the capabilities found desirable by end users in the EPRI 2016 report, all of the criteria besides from the ability to track many nuclides could also be applied to a NRHES. Both systems are time dependent and include uncertainty measures. Many of the uncertainty measures found in NFCSs are the same for a NRHES including O\&M costs, water costs, and challenges in siting a nuclear power plant. Optimally, both systems would be:
+Prof. Paul P. H. Wilson reported for the Blue Ribbon Commission on America's Nuclear Future "Comparing Nuclear Fuel Cycle Options" discusses, at a high level, different nuclear fuel cycle simulators' performance for a once-through system, a limited recycling option, as well as continuous recycling. Prof. Wilson describes nuclear fuel cycle simulators as focusing "on understanding mass flows and facility deployments under alternative civilian nuclear fuel cycles, particularly during transitions between fuel cycles." The two uses for a NFCS as stated in the report are to make informed policy decisions and to determine more fine-grained technical decisions about what technologies to pursue. Prof. Wilson breaks down some of the assumptions either explicitly or implicitly included in the nuclear fuel cycle simulators, including:
 \begin{itemize}
-
-\item flexible so that new component models and specific regional characteristics could easily be added
-\item well documented and accessible
-\item include uncertainty/sensitivity analysis capabilities
-\item usable by technical and non technical people alike to address policy decisions.
-
+\item "Growth rate of nuclear electricity,
+\item Date of introduction of new technologies and facilities,
+\item Constraints on spent fuel interim storage capacity,
+\item Constraints on spent fuel storage/cooling times,
+\item Constraints on quantity of separated plutonium,
+\item Relative priority of different fuel cycle paths, and
+\item Supply vs. demand flow control at each fuel cycle stage."
 \end{itemize}
 
-If a NFCS were to model a NRHES, it would need to be able to function in a dynamic or quasi dynamic state to capture the dynamic nature of the NRHES.  The nuclear fuel cycle does not require materials to be exchanged nearly as regularly as a nuclear hybrid energy system and with as inconsistent of quantities. The dynamic impacts on the physical system would need to be included in order to generate a meaningful model of a NRHES. The stochastic aspect of the renewables components of a NRHES would also require either external coupling with a tool able to model randomness such as RAVEN or the use of real time data from a specific region. The dynamic and stochastic components of modeling a nuclear hybrid energy system would take some work to incorporate.
+Prof. Wilson explains that a degree of uncertainty present in each of the assumptions introduces even greater variability. NFCS differ both in how they calculate their FOMs as well as in how the FOMs are presented. Benchmarks for NFCSs often entail summaries for each fuel cycle simulator by the authors of the tool \cite{Guerin2009}. Making comparisons of various tools is difficult because most of the tools are proprietary. As a result, the reports of the developers are the main access to understanding the tool rather than using a controlled end user. Different authors choose to discuss different aspects of the NFCS, adding to the difficulty of comparing the various NFCS. Even when two NFCSs have similar functionality, it can be hard to make comparisons based on benchmark reports due to different emphases in the reports describing the tools. This variability leads to model development with built-in biases that weigh certain characteristics of a technology as more important, thereby skewing the results.
 
-Many of the features commonly found in a NFCS would not be needed in a NRHES model.  There would be no need to model a fleet of NRHESs at this point in development, so a system would have to be able to model discrete facilities.  The reactor calculations, such as burnup, would not be needed for a NRHES.  The back end of the fuel cycle, such as models for reprocessing and long term waste storage would also not be applicable at this point to a NRHES model.  The primary qualities that would be used are optimization methods, economic evaluation, and means of exchanging materials in a system. The optimization methods and economic evaluation can be applied externally from the primary modeling tool.  Therefore, this preliminary analysis does not find a major reason to pursue modeling a NRHES with a NFCS.
+Due to the uncertainties, NFCSs are best used as comparative tools, as opposed to predicting absolute values \cite{Wilson2012}. Given different constraints within an NFCS, it can demonstrate the relative differences between the two simulations better than the absolute nature of either one. The strength of relative comparisons is especially clear in economic analyses, where prices and how they are likely to change over time are unpredictable. The simulator, if built well, would be able to show which model would be cheaper, but not exact prices\cite{Wilson2012}. Some of the uncertainty concerns surrounding simulating a nuclear fuel cycle as stated by Prof. Wilson:
 
+\begin{itemize}
+\item Cost of water
+\item Uranium consumption and costs
+\item Total land use
+\item Waste disposal space
+\item Localized variations of the estimated peak dose rate
+\item Radiotoxicity of waste streams
+\item Radioactive liquid and gaseous release volumes
+\item Conventional pollutant release over the lifecycle of the nuclear system
+\item Required Enrichment of the fuel
+\item Attractiveness of separated materials for proliferation of nuclear weapons
+\item Difficulties in siting a nuclear power plant, and
+\item Variation in how metrics are calculated.
+\end{itemize}
+
+Many of the above listed characteristics are region-specific capital, operations, and maintenance costs that would also apply to NRHES.  In order to include these characteristics for both the nuclear fuel cycle and NRHES, some measures of uncertainty would need to account for the variability of circumstances. Wilson breaks down the uncertainties into the categories of cost, safety, resource utilization, sustainability, and non-proliferation ~\cite {Wilson2012}.
+
+The major difference between many of these nuclear fuel cycle simulators is the ability to model discrete facilities and fuel batches versus modeling continuous mass flows throughout the fleet of facilities operating in an identical fashion. In the case of the fleet modeling, the average value for each of the facilities is assumed. The discrete model requires more information, such as the fuel composition for each type of reactor included in the simulation, while providing a more detailed analysis. As a result, the discrete model is more computationally complex and expensive.
+
+In "Modeling the Nuclear Fuel Cycle," Juchau et al. (2010) describe four functions as necessary for a NFCS to meet the desired qualities of a proposed organization called the Simulation Institute for Nuclear Enterprise Modeling and Analysis \cite{Juchau2010}. The four functions, which reiterate the characteristics described by Prof. Wilson, include:
+
+\begin{itemize}
+\item "Characterize and deploy individual fuel cycle facilities and reactors in a simulation while discretely tracking material movements,
+\item The capability to perform an uncertainty analysis for each element of the fuel cycle and an aggregate uncertainty analysis,
+\item Inclusion of an optimization engine able to optimize simultaneously across multiple objective functions, and
+\item Open and accessible code software and documentation to aid in collaboration between multiple entities and to facilitate software updates."
+\end{itemize}
+
+Juchau (2010) reviews the nuclear fuel cycle simulator tools CAFCA, COSI, CEPMNFC, DANESS, NFCSim, VEGAS, VISION, NFCSS, and GENIUS 1. His conclusion is that many of these tools have overlapping functionalities, partly due to the proprietary nature of at least components of each. One reason why there are so many nuclear fuel cycle simulators is that many of the countries that currently have NPPs have designed their own simulators. Figure 3 depicts the non-US NFCSs along with some of their software dependencies. Most of the fuel cycle simulators are not open source or available for download; thus, each nation tends to have proprietary software. As discussed with Prof. Kathryn D. Huff, it is also often more efficient, both in terms of time spent as well as better integration, if the different functions are designed by the same team \cite{redfoot_huff_2016}. Integrating components, such as a burnup calculation, from one system into a new system can often be more challenging than building the function from scratch. While sharing code can be challenging among various programs, some calculations or libraries are commonly used by NFCSs. For example, Figure 3 depicts EVOLCODE, FUTURE, and FAMILY21 as all relying on Origen.
+\chapter{Methodology of Modeling a NRHES with a NFCS}
+The underlying structure of passing materials between various facilities is similar enough between nuclear materials in a fuel cycle and heat or electricity flow in a nuclear hybrid energy system that a nuclear fuel cycle simulator could theoretically model a nuclear renewable hybrid energy system. In the case of a NRHES model, the facilities are the NPP, the renewable, and the industrial process at least.  In the case of the nuclear fuel cycle, the facilities are the steps in the given fuel cycle. Both systems are time dependent and include uncertainty measures. Many of the uncertainty measures found in NFCS are the same for NRHES including O\&M costs, water costs, and challenges in siting a nuclear power plant. The uncertainties can be accounted for using sensitivity analyses. Optimally, both systems would be:
+\begin{itemize}
+
+\item flexible so that new component models and specific regional characteristics could easily be added,
+\item open source so that researchers can use the tools instead of rebuilding already available tools, and
+\item usable by technical and non technical people alike to address policy decisions.
+\end{itemize}
+
+A NFCS must be able to reasonably model the dynamic nature of NRHES. The dynamic aspects of concern are how the energy would switch between different loads as well as the ramping of various generation components.  The length of the simulations and time step are vastly different between NRHES and the fuel cycle. The nuclear fuel cycle does not require the quantities to be exchanged nearly as regularly as a nuclear hybrid energy system and with as inconsistent of quantities. While the fuel cycle may be run with a monthly time step and the same resource amount is exchanged at each time step, a NRHES requires a variable amount of resource to be exchanged on an hourly or minute-to-minute scale. The dynamic impacts on the physical system must be included in order to generate a meaningful model of a NRHES. The stochastic aspect of the renewables components of a NRHES also requires either external coupling with a tool able to model randomness such as RAVEN or the use of real time data from a specific region. The dynamic and stochastic components of modeling a nuclear hybrid energy system require some work to incorporate.
+
+Many of the features commonly found in a NFCS would not be needed in a NRHES model.  There would be no need to model a fleet of NRHES at this point in development, so a system would have to be able to model discreet facilities.  The reactor calculations, such as burnup, would not be needed for a NRHES.  The back end of the fuel cycle, such as models for reprocessing and long term waste storage would also not be applicable at this point to a NRHES model.  The primary qualities that would be used are optimization methods, economic evaluation, and means of exchanging materials in a system.
+
+The nuclear fuel cycle shares similar enough underlying characteristics with a nuclear hybrid energy system to loosely model the system.  A more thorough analysis of the benefits and challenges to using a NFCS to model NRHES will be discussed surrounding the model. A NFCS that is in a mature state of development, open source, easy to incorporate new components, flexible enough to change the materials exchanged rapidly, and able to be coupled with external tools for modeling the renewable resource could speed up the development of a NRHES model. Cyclus is the only currently open source nuclear fuel cycle simulator.  As such, Cyclus has distinct advantages among the NFCSs when developing an NRHES.
+
+\section{Cyclus}
+
+The flexibility and modular design of Cyclus suggest its potential to successfully model a NRHES. The Cyclus fuel cycle simulator's underlying system is the dynamic resource exchange (DRE) \cite{Huff2016}.  The DRE has a set time step at which point certain facilities will put their resources on the market for exchange while other facilities can make a bid for the desired amount of the resource. For example, in the case of modeling the nuclear fuel cycle, the reactor could declare how much spent fuel it has once every eighteen months.  A reprocessing facility and a long-term geologic repository could both bid on how much of the spent fuel each facility could take at that point.  The DRE has a built in functionality of preferences for allocating a resource.  For the example given, a preference could be a built in for the reprocessing facility, meeting the bid from this facility before sending the remaining spent fuel resource to the long-term geologic repository. The simulation could be run over hundreds of years to demonstrate the accumulation of spent fuel and fission products over the entire timeline.
+
+The NRHES model built in Cyclus will determine whether the DRE is sufficiently flexible to model other systems besides the nuclear fuel cycle.  In the case of a NRHES, the DRE would be passing the electricity or heat to the various facilities.  For example, the reactor could  pass heat to the industrial process at a time step of one hour or one minute and send electricity to the grid.  The renewable would pass electricity to the grid when generating.  The grid would make a bid every time step for how much electricity is demanded.  The industrial process would also make a bid for the heat and/or electricity required.  The built in preferences functionality in Cyclus could be used to ensure the resource is sent to the facility willing to pay the highest price for the resource.  Thus, the electricity or heat could be sent to the industrial process when the product created with that energy is worth more than the current value of electricity on the grid.
+\chapter{Thermal Versus Electrical Coupling}
+From the literature review on NRHES, a notable gap in the current research is modeling the benefits gained from thermally coupling systems as compared to electrically coupling.  The efficiency benefits would have to be greater than the costs associated with co-location.  Cyclus's ability to dispatch resources could allow for a comparison between coupling an industrial process thermally or electrically. The Cyclus model developed for this research will be used to compare a system that exclusively produces electricity, but varies in the amount of electricity sent to the industrial process, with a system which sends process heat directly from the reactor to the industrial process as well as sending electricity to the grid.
+
+\chapter{Figures of Merit}
+To determine the performance of an electrically coupled versus a thermally coupled NRHES with the Cyclus model, clear performance criteria must be established.  While economic figures of merit must be evaluated for a NRHES, other benefits of the system such as grid reliability and safety of the system should also be considered. This section of the thesis details the current efforts at establishing a figure of merit to analyze a NRHES and suggests two approaches to future assessment, Analytic Hierarchy Process (AHP) and a dimensional analysis approach.
+\section{Economic Figures of Merit}
+\subsection{Levelized Cost of Electricity}
+The levelized cost of electricity (LCOE) is the typical FOM for comparing the profitability of different generating sources, such as nuclear, fossil fuels, and renewables. The LCOE is mathematically defined as the costs of a power-generation source divided by the total energy output, with units of \$/unit of energy. The LCOE is easiest to think about as the lowest average amount of money a project can sell the electricity generated for over in order to break even, or for the Net Present Value (discussed below) to equal zero. The LCOE is a ubiquitous metric used for evaluating energy generation sources, but it is not always calculated the same way.  The two equations below illustrate very different means of calculating a figure bearing the same name.  While a lack of clarity about what is meant by LCOE can be mitigated by defining the means of calculating the value, this practice is often overlooked.
+Ted Baker, in Analysis of Nuclear Hybrid Energy Systems with Battery Storage Using Levelized Cost of Electricity, evaluated the effectiveness of the levelized cost of electricity (LCOE) for a hybrid system \cite{Baker2016}. His analysis found the LCOE was incapable of fully capturing the benefits of energy storage associated with a NRHES and did not including all revenue streams.  Baker defines the utilization as energy used divided by the total possible generation. In order to normalize the LCOE, the calculated LCOE shown in equation 1 below is multiplied by the total energy actually used for each source.  As Baker describes, to normalize the LCOEs "the sum of all specific LCOEs is then divided by the sum of the demand data. This weights each source by its contribution to coverage (pg. 20)."  The revenue rate of the secondary product in \$/MWh is subtracted from the total LCOE in order to find the net LCOE.  Baker concludes that the LCOE is ineffective for the revenue stream of a secondary product and includes errors for variable generation and battery storage. Baker recommends exploring more advanced LCOE and Levelized Cost of Storage (LCS) calculations. The LCS focuses on comparing the costs between various energy storage sources optimizing for different use cases \cite{Tyskiewiczd}.
+
+\subsection{Levelized Avoided Cost of Electricity (LACE)}
+The levelized avoided cost of electricity focuses on including fluctuating renewables by determining the money saved by the dispatchable resource for not having to produce that energy. With dispatchable resources whose costs largely come from their fuel source, such as fossil fuels based generation sources, there is a savings for the fossil fuel plant for not having to produce the electricity.  For nuclear power, whose costs come almost entirely from sunk in capital costs, there is very little avoided cost for not producing the electricity generated from the renewable.  LACE applies specifically to renewables and will be interesting to include as a FOM for a NRHES as a fossil fuel, a nuclear, and a renewable generation source are all present. The LACE will be different depending on whether the renewable generation replaces the nuclear or fossil fuel power plant.
+\subsection{Net Present Value}
+Net Present Value (NPV) is generally considered to be the present value of a system at a given required internal rate of return (IRR) compared to the initial investment. The question a NPV analysis tries to answer is whether, based on the overall profit, a project is worth investing in.  The NPV includes whether the money invested in a project will make more of a profit over its lifetime than simply leaving the money in the bank.  In terms of comparing NRHES with different industrial processes, it is a metric that compares the likely profits received from each.  The net present value determines the LCOE of a project over its lifetime by finding the internal rate of return.  The Internal Rate of Return (IRR) is "the interest rate at which the net present value of all the cash flows from a project or investment equal zero."  The IRR is the interest rate that either the money spent on the NRHES would earn if it is kept in the bank, or the profit over the lifetime NRHES would earn.  The net present value needs to include a grid reliability metric and a value for non-emitting energy to fairly represent a NRHES.
+\section{Grid Reliability}
+A hybrid energy system in general has not only a goal of profitability, but to ensure a reliable source of energy, especially from a system that includes fluctuating sources of energy. The system would, therefore, benefit from an evaluation of the reliability of the energy generated as well as an economic evaluation.
+\subsection{Loss of Load Probability (LOLP)}
+The loss of load probability (LOLP), is "a measure of the probability that a system demand will exceed capacity during a given period; often expressed as the estimated number of days over a long period, frequently 10 years or the life of the system" \cite{Electromn}. The LOLP was originally introduced in 1947 by Giuseppe Calabrese and has since become a standard grid reliability metric \cite{calabrese1947generating}. The LOLP can be mathematically shown, as described in Hattab et. al. (2015), as \cite{Hattab2015}:
+\begin{equation*}
+LOLP =\sum_{j} P_jt_j\,.
+\end{equation*}
+
+Where P(j)*t(j) is the contribution that a particular outage of some magnitude O(j) has on the overall risk of a load greater than the reserve. t(j) is the number of days that an outage of some magnitude O(j) would cause a loss of load in the system\cite{Hattab2015}.
+
+One major goal of a NRHES is to minimize the number of days that the system cannot meet the grid demand.  With fossil fuels, nuclear, and renewables all contributing, along with a battery, considerable backup ensures that grid demand is met. For a NRHES, two LOLPs must be generated; one for meeting the electricity demand from the grid and one for meeting the energy needs of the industrial process.  If the industrial process intends to fluctuate its output along with the energy generated from renewable and the grid demand, the losses from the industrial process will need to be taken into consideration for grid reliability. In order to fairly evaluate the benefits of an NRHES, metrics describing the system need to include a grid reliability component.
+Eventually, the goal is to determine a figure of merit that is able to incorporate grid reliability and profitability metrics.  The profitability metrics will include the materials replacement rates for different reactor types, industrial processes, and heat transport mechanisms. Future work will include emissions in the FOM. Since at this point, standard figures of merit have not been established for NRHES, this research will work to determine some combination to evaluate the systems.
+
+
+Here ends what I will send for a review to my committee.
+
+\chapter{Applying Risk Assessment Techniques to NRHES}
+Identifying likely failures is an important aspect of safe and secure operation of any large infrastructure. For a NRHES, a large piece of infrastructure that has as of yet to be built, a design that addresses likely failures ensures long term safe, reliable, and profitable operation.   In order to examine the impacts of a nuclear renewable hybrid energy system, this chapter will evaluate the economic, grid reliability, and physical risks of failures in the coupling of a nuclear power plant to an industrial process which functions in a dynamic fashion. The dynamic nature of the heat allocation in a nuclear hybrid energy system results in uncertainties both in the reliability of the energy demanded by the grid as well as that demanded by the industrial process. The focus of this section is to develop a means of comparing various NRHES configurations to determine which NRHES configuration will be used in the Cyclus model.
+\section{Risk Assessment Background}
+Risk assessment is a means of analyzing complex systems for hazards. Often the risk assessment tools; such as probabilistic risk assessment, fault tree analysis, and failure mode and effects analysis; model many variables in large systems and attempt to contain them into an easy to understand table or number for comparison. Since there has yet to be a physical model of a NRHES built, now is the appropriate time to assess risks in order to incorporate mitigating measures in the design basis. Risk based design has been used for pyroprocessing and hot cell systems (Borrelli, 2016), though focused on proliferation risks. Incorporating risk management in the design of a facility minimizes the costs and dangers associated with the system in the long run.
+	When determining an appropriate electricity generation source for a given region it is important to incorporate variables such as economic viability, emissions, flexibility, and reliability. A NRHES is even more difficult to quantify as it supplies both electricity to the grid as well as a secondary product. The goal is to have a more economically robust system that emits less and is both more reliable and more flexible than any electricity generation source currently available.
+
+\section{Preliminary Hazards Analysis}
+As was done in Falcone et. al. in establishing a new approach to risk assessment of cogeneration systems, this risk assessment will begin with a preliminary hazards analysis (PHA). The main purpose for a PHA is, as the name suggests, identify hazards and possible implications of the design of a particular system or product.  A PHA is appropriate for the current state of development for a NRHES due to it still being in the design stage. Since a NRHES is currently in a conceptual phase, the goal of this PHA will be to reduce or eliminate potential economic, reliability, and physical safety hazards. Performing a PHA at this early point in the lifecycle of a NRHES will hopefully reduce the resources spent on engineering design and potential construction errors. As stated in Ostrom et. al.  "a PHA should include the following:
+
+\begin{itemize}
+\item Establish for purpose of the analysis
+\item Boundaries between the system, any system with which it interacts, and the domain;
+\item Overall system structure and functionality
+\item Identify
+\item Detailed list of hazards of the system based on preliminary hazards list report and the requirements;
+\item Update hazards list;
+\item Accidents to the most practicable extent
+\item Events of accident sequience and those that can be discounted;
+\item Record in hazards list.
+\item Assign Each accident a severity categorization and each accident sequence a predicted qualitative/quantitative probability target.
+\item Document Any safety features that are to be implemented during the design and development phase"
+\end{itemize}
+This analysis will seek to address the above requirements from an economic, grid reliability, and physical safety perspective of a NRHES. Due to lack of expertise in either the economic or possible physical failures of a NRHES, this analysis is not exhaustive but will hopefully address some of the more obvious concerns. The PHA will need to be added upon as research continues and hazards are determined.
+	In order to perform a PHA requires classifying the hazard level and frequency associated with each event. The hazard classes for this PHA range from Negligible to Catastrophic. A Class I hazard has negligible negative outcomes, a Class II hazard has marginal effects, a Class III hazard has critical impacts, and a Class IV hazard has catastrophic impacts (Ostrom et. al., 2012).  The frequency of occurrence, since this system has yet to have a physical demonstration, will be qualitative and an intellectual exercise as the values cannot be verified at this point.
+
+\section{Economic PHA}
+
+\section{Grid Reliability PHA}
+
+\section{Physical PHA}
+
+\section{Analytic Hierarchy Process (AHP)}
+Analytic hierarchy process (AHP) is a decision analysis method, a means of comparing various options, based on multiple attributes. For this research, the same NRHES with only the industrial process switched out will be compared. As mentioned before, the three industrial processes being compared for this research are desalination, hydrogen production, and synthetic fuel production. The AHP includes comparing each of the potential options on suboptions. In this case the three industrial processes to potentially be included in the NRHES will be compared based off of economics, grid reliability, and physical safety. These subcomponents can be easily analyzed, thus the AHP provides not only insight into which is the best overall choice given the inputs and weights, but also which is the strongest candidate for each of the components. The AHP is especially applicable at this point in the development of the NRHES due to the relative values of physical safety for example for a desalination plant as compared to a synthetic fuel plant can only be based upon expert judgement. The AHP measures the consistency of the values used to compare the different options using a consistency ratio, which needs to be less than .1, or 10\%, in order to be considered consistent.
+The focus for the AHP conducted in this research is on the process of comparing different industrial processes for an NRHES, not on the actual values. In order to find the relative values of the value of 1 MWth for a desalination system versus a synthetic fuel system, for example, would require finding the optimal size of each of the industrial processes for the NRHES and the total costs associated with the process.  Baker, 2016  included calculations for sizing a reverse osmosis desalination plant, capital costs, and O\&M costs.  Baker converted the values of selling the desalinated water from \$/kgal to \$/kWh in order to evaluate the value of the electricity used to generate the product. Future work for determining the optimal industrial process will include undergoing a similar process for hydrogen and synthetic fuel production in order to have appropriate values to input into the AHP.  The tables shown below display the relative values for each of the characteristics considered in the AHP. The values are chosen on a scale of one to five, with the industrial process strongly reflecting that characteristic receiving a five and the characteristic relatively less reflecting those characteristics receiving appropriate smaller numbers. As current research on NRHES focuses on the economic feasibility of the system, economics will be the most strongly weighted at 62.5\% with grid reliability weighted at 25\% and safety at 12.5\%.  While the safety of the system is in reality the most important characteristic, as it is the foundation which the economic and grid reliability characteristics rely on, the safety issues are the most easy to mitigate and the most well known. Safety is also included in the economic and grid reliability metrics. The weights associated with each of the characteristics were found through the numbers associated with the relative priorities from Table 9.
+
+\section{AHP Expert Survey Methodology}
+The results from the AHP Expert survey will determine which industrial process is modeled in the Cyclus model.
+\section{AHP Results}
+
+
+
+
+
+\chapter{Future Work}
+While there are some interesting potential benefits to a NRHES, such as diversifying sources of electricity production, co-locating the facilities have some potential drawbacks.  Integrating exclusively through the grid results in a decoupling of potentially negative feedback effects \cite{Harrison2016}.  A meaningful model would be able to compare a NRHES to the current grid system. The CYCLUS tool could be used to model the difference between co-locating the given facilities in a NRHES as compared to each of the facilities acting independently at different nodes on the grid.  The DRE could track the profitability of each of the facilities independently, each of the generation sources selling electricity to the grid and the industrial facility producing a product.  The DRE could also treat the system as a single facility that outputs two products, the industrial good and electricity to the grid. Along with profitability, other important figures of merit, such as emissions and hours not meeting the grid demand could be tracked and compared in CYCLUS.
+
+Future research will focus on using CYCLUS as a deployment tool for electricity \cite{redfoot_rabiti_2017}. The DRE would be able to put some quantity of heat or electricity on the resource exchange market.  The industrial process or grid could each bid for the heat using economics or other preference model.  The time step for the DRE would be very short, on the order of a minute, in order for the model to output valuable information.
+ New archetypes for the waste heat could also be included in order to determine if uses for waste heat are worth pursuing.  Future research will focus on building the archetypes for allocating the heat and electricity in a NRHES.
 \section{Summary Remarks}
-While nuclear fuel cycle simulators share some similar underlying characteristics with a nuclear renewable hybrid energy system, there is significant enough differences for software to likely be incongruent.  NFCSs are not continuous mass flow systems, they have much larger time scales than NRHES, and they are not run in a dynamic fashion. The major challenge in modeling a NRHES with a NFCS is including the dynamic aspects of the system and how that will affect the overall costs of the system. So to conclude, NRHES modeling as it progresses can benefit from NFCS development by incorporating desirable software characteristics such as being open source, easy to incorporate new components, flexible, including economic tools and sensitivity/uncertainty tools. Future work on the current NRHES models could benefit from the ability to be coupled with external tools for the physics modeling for the various industrial components. The current model under development at the national laboratories already has sensitivity and uncertainty analyses due to the coupling of the system with RAVEN as well as economic analysis. Future work on NRHES modeling could include developing a visual tool, making the model more flexible for including other sources of software, and progressing the planned release of the model as an open source tool.
 
 
-\end{linenumbers}
+\section{Examples of acronyms}
+Example of acronym: \ac{cogs}
+Using it again: \ac{cogs}
+Plural one: \acp{vm}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --------------------------------------------------------------------------
+% --  --
 
-\pagebreak
-\section*{Acknowledgments}
 
-Thank you to Dr. Shannon Bragg-Sitton, Dr. Cristian Rabiti, Dr. Aaron Epiney, Dr. Jong Suk Kim, and Dr. Kathryn Huff for their time and insight.
+% --------------------------------------------------------------------------
+% -- Summary and Conclusions --
+\chapter{Summary and Conclusions}
+\label{Chapter:SummaryAndConclusions}
 
-\pagebreak
-\bibliographystyle{ans_js}                                                                           %custom ANS journal submission template bibliography style
-\bibliography{bibliography}
+Example summary and conclusions. You can refer to chapters and sections using their label, e.g Chapter \ref{Chapter:Introduction}.
 
-%%% If you desire to place footnotes at the end of the document, uncomment these two lines and the four related near the beginning of this file
-%\pagebreak
-%\theendnotes
+% --------------------------------------------------------------------------
+% -- References --
+
+\clearpage
+\renewcommand\bibname{References} % Relabels bibliography title as "REFERENCES"
+\addcontentsline{toc}{chapter}{\textsc{\bibname}} % Adds to table of contents
+\bibliographystyle{plain}  % Sets style, plain is fine for this
+\bibliography{example-bib-file.bib}  % Name of bibliography file containing your references. It is best practice to have a separate file, as it makes it easier to share your references, make derivative works, or use the references from a prior work (e.g a prior paper that your thesis work is building on).
+
+% Examples of citing GitHub repositories:
+%   http://academia.stackexchange.com/a/14015
+%   https://github.com/blog/1840-improving-github-for-science
+%   https://guides.github.com/activities/citable-code/
+%   https://github.com/GhostofGoes/uidaho-masters-thesis/
+%   Wait, that last one is recursive...oh no. RIP poorly programmed web crawling spider.
+
+
+
+
+% --------------------------------------------------------------------------
+% -- Appendices --
+\clearpage
+\appendix  % Marks start of appendices
+
+% Appendices are done as LaTeX chapters
+\chapter{Your fist appendix}
+First appendix content
+
+% ** This is an example of a YAML file listing, but it could be anythig, e.g full experiment results, or list of equipment used. **
+% \clearpage
+% \chapter{Exercise Specification}
+% \lstinputlisting[firstline=56, firstnumber=1, language=yaml,caption=Exercise Specification]{Specifications/exercise-specification.yaml}
+
+% ** Example of a Python script code listing **
+% \clearpage
+% \chapter{vsphere-info Script Source Code}
+% \lstinputlisting[firstline=16, firstnumber=1, language=python, caption=vsphere-info script]{Code/scripts/vsphere_info.py}
+
+
 
 \end{document}
+
+% ** DO NOT PUT ANYTHING AFTER THE END OF THE DOCUMENT! **
