@@ -11,22 +11,23 @@
 % Goes recommends having thesis reviewed by Writing Center and CoGS before completion.
   % Goes also credits Matthew Brown, Cara Leatherman, Chris Zeoli with template improvements.
 % It is strongly recommended that you read through the .cls file, particularly the custom commands,
-  % and look through the comments generally before you plunge into writing so you know what's 
-  % available to you in this template. Also included are some hopefully helpful ideas for how to 
+  % and look through the comments generally before you plunge into writing so you know what's
+  % available to you in this template. Also included are some hopefully helpful ideas for how to
   % approach The Thesis that may be beneficial. Links to helpful resources are peppered throughout.
 
 % =========================================== PREAMBLE =========================================== %
-% ** DO NOT REPLACE THIS. Everything WILL break. ** This connects the class file to this document, 
+% ** DO NOT REPLACE THIS. Everything WILL break. ** This connects the class file to this document,
   % which adds meaning to macros like \graddate in the metadata and links all the styles.
 \documentclass[12pt]{UIdahoMastersThesis}
 \usepackage{pdflscape}
 \usepackage{pdfpages}
-% Add other needed packages (\include statements) at the top of the UIdahoMastersThesis.cls class 
+%\usepackage{appendix}
+% Add other needed packages (\include statements) at the top of the UIdahoMastersThesis.cls class
   % file using \RequirePackage. This keeps the main thesis input file cleaner.
 
 % ==------------------------------------- Thesis Metadata --------------------------------------== %
 % Thesis Information
-\title{Allocating Heat and Electricity in a Nuclear Renewable Hybrid Energy System Coupled with a Water Purification System(rough draft)}
+\title{Allocating Heat and Electricity in a Nuclear Renewable Hybrid Energy System Coupled with a Water Purification System}
 \author{Emma K. Redfoot}
 \thesisdegree{Master of Science}  % e.g Master of Science, Master of Engineering, etc.
 \major{Nuclear Engineering}  % e.g Computer Science, Computer Engineering, etc.
@@ -37,7 +38,7 @@
 \graddate{August 2018}  % Graduation date, e.g May, 2017
 % --------------------------------------------------------------------------
 
-% Configure the PDF output (Most of this is optional, it just adds metadata to the PDF, but that's 
+% Configure the PDF output (Most of this is optional, it just adds metadata to the PDF, but that's
   % much more professional to have and helps digital versions be traceable to you.)
 \usepackage[pdftex,
 	pdfauthor=\author,
@@ -73,7 +74,7 @@
   % Again, putting figures together helps to clean up your project.
 \graphicspath{ {./Figures/} }
 
-% Uncomment to set default style for Listings to be code (Code style is defined in .cls file--check 
+% Uncomment to set default style for Listings to be code (Code style is defined in .cls file--check
   % there for more information on how to use this).
 % \lstset{style=code}
 
@@ -110,7 +111,7 @@
 	{\LARGE\textsc{Abstract}}
 \end{center}
 
-Growing concerns over the impact of fossil fuels on climate change are driving efforts to use more low emission fuel sources. In response, fluctuating renewable energy sources, such as solar and wind power, are growing to meet more of the electric demand. However, maintaining reliable energy accessibility to the grid requires a stable, dispatchable source of power. Nuclear power plants provide low emission, reliable energy to the grid \cite{IPCC}. To best reduce reliance on fossil fuels while ensuring reliable energy generation and profitability, Nuclear Renewable Hybrid Energy Systems (NRHESs) focus on electrically and thermally coupling renewable generation with a nuclear power plant by co-locating the generation sources on an industrial park. The industrial park is comprised of at least the nuclear power plant, the renewable energy source, and some form of industrial process that consumes the energy not used by the grid. The main question this thesis focuses on is what are the economic and thermodynamic benefits of thermally coupling an industrial process to the nuclear power plant in a NRHES as opposed to electrically coupling. This paper analyzes the computational modeling approaches currently being pursued for NRHESs. Initially, the thesis begins by reviewing past research to determine the necessary software capabilities for an NRHES model. Then, with the help of an expert survey and the risk assessment techniques of Preliminary Hazards Analysis and Analytic Hierarchy Process, an industrial process with strong support for coupling with a generic NRHES model is determined. This thesis then develops an Aspen HYSYS models of a Palo Verde Generating Station reactor coupled to both a thermal multi-stage flash distillation water purification system as well as an electrically coupled reverse osmosis system. To compare the different couplings, this thesis applies an economic exergy analysis to the system. Finally, results and future research are discussed.
+Growing concerns over the impact of fossil fuels on climate change are driving efforts to use more low emission fuel sources. In response, fluctuating renewable energy sources, such as solar and wind power, are growing to meet more of the electric demand. However, maintaining reliable energy accessibility to the grid requires a stable, dispatchable source of power. Nuclear power plants provide low emission, reliable energy to the grid \cite{IPCC}. To best reduce reliance on fossil fuels while ensuring reliable energy generation and profitability, Nuclear Renewable Hybrid Energy Systems (NRHESs) focus on electrically and thermally coupling renewable generation with a nuclear power plant by co-locating the generation sources on an industrial park. The industrial park is comprised of at least the nuclear power plant, the renewable energy source, and some form of industrial process that consumes the energy not used by the grid. This thesis focuses on the potential economic and thermodynamic benefits of thermally coupling an industrial process to a nuclear power plant in a NRHES as opposed to electrically coupling. This paper analyzes the computational modeling approaches currently being pursued for NRHESs. Initially, the thesis begins by reviewing past research to determine the necessary software capabilities for an NRHES model. Then, with the help of an expert survey and the risk assessment techniques of Preliminary Hazards Analysis and Analytic Hierarchy Process, an industrial process with strong support for coupling with a generic NRHES model is determined. This thesis then describes an Aspen HYSYS models of a Palo Verde Generating Station reactor coupled to both a thermal multi-stage flash distillation water purification system as well as an electrically coupled reverse osmosis system. To compare the different couplings, this thesis applies an economic exergy analysis to the system. Finally, results and future research are discussed.
 \newpage
 
 % --------------------------------------------------------------------------
@@ -119,25 +120,25 @@ Growing concerns over the impact of fossil fuels on climate change are driving e
 \begin{center}
  	{\LARGE\textsc{Acknowledgements}}
 \end{center}
-    
-    
-   
-I want to thank all of the researchers who have been invaluable in helping me determine what I wanted to research for this thesis and critiques and feedback throughout the process. Dr. Shannon Bragg-Sitton inspired me to focus on the possibilities surrounding Nuclear Renewable Hybrid Energy Systems and provided critical insight. I have enjoyed working on and honing my comprehension of the topic. Dr. Cristian Rabiti helped me with some critical conversations during the research project which helped me determine the subject manner and approach used in this research. Dr. Kathryn Huff helped me to understand how to approach research in a structured and reproduceable manner using technical tools. Working at the Center for Advanced Energy Studies, CAES, has provided me access to remarkable people who took the time to talk with me about any topic of interest I brought to them. Thank you Dr. Brenden Heidrich, Dr. Stephen Herring, Dr. Tammie Borders, and Dr. Travis McLing for expanding my educational experience significantly. Dr. Tammie Borders helped build structure into my thesis determination and ensure I was  progressing.  This was critical to me moving forward with this thesis. 
-    
 
-Now for the wonderful people from University of Idaho I had the opportunity to work with.  Thank you Alice Allen for being willing to guide me through all of the challenges of applying to graduate school and then graduating from graduate school. Thank you Dr. Richard Cristiansen for working on building up this program and reassuring me that I always have a home at the University of Idaho. Thank you Dr. McKellar for inspiring in me a real interest in thermohydraulics.  Dr. R.A. Borrelli, you have been the most supportive major professor anyone could ask for. Thank you for encouraging me both as an engineer as well as developing my passion for nuclear advocacy.  Thank you for always having an open door policy. Finally, I want to think the other students in the UI Nuclear Engineering program in Idaho Falls. Looking forward to coming in to work everyday made my whole world better. 
+
+
+I want to thank all of the researchers who have been invaluable in helping me determine what I wanted to research for this thesis and critiques and feedback throughout the process. Dr. Shannon Bragg-Sitton inspired me to focus on the possibilities surrounding Nuclear Renewable Hybrid Energy Systems and provided critical insight. I have enjoyed working on and honing my comprehension of the topic. Dr. Cristian Rabiti helped me with some critical conversations during the research project which helped me determine the subject manner and approach used in this research. Dr. Kathryn Huff helped me to understand how to approach research in a structured and reproduceable manner using technical tools. Working at the Center for Advanced Energy Studies, CAES, has provided me access to remarkable people who took the time to talk with me about any topic of interest I brought to them. Thank you Dr. Brenden Heidrich, Dr. Stephen Herring, Dr. Tammie Borders, and Dr. Travis McLing for expanding my educational experience significantly. Dr. Tammie Borders helped build structure into my thesis determination and ensure I was  progressing.  This was critical to me moving forward with this thesis.
+
+
+Now for the wonderful people from University of Idaho I had the opportunity to work with.  Thank you Alice Allen for being willing to guide me through all of the challenges of applying to graduate school and then graduating from graduate school. Thank you Dr. Richard Cristiansen for working on building up this program and reassuring me that I always have a home at the University of Idaho. Thank you Dr. McKellar for inspiring in me a real interest in thermohydraulics.  Dr. R.A. Borrelli, you have been the most supportive major professor anyone could ask for. Thank you for encouraging me both as an engineer as well as developing my passion for nuclear advocacy.  Thank you for always having an open door policy. Finally, I want to think the other students in the UI Nuclear Engineering program in Idaho Falls. Looking forward to coming in to work everyday made my whole world better.
 % * <r.angelo.borrelli@gmail.com> 2018-06-12T17:18:52.317Z:
-% 
+%
 % > Cristiansen
 % Christensen
-% 
+%
 % ^.
 
- 
+
 
 \newpage
 % ==---------------------------------------- Dedication ----------------------------------------== %
-% Dedication. This is optional, as per the handbook, and can be included in the Acknowledgement 
+% Dedication. This is optional, as per the handbook, and can be included in the Acknowledgement
   % section above, as it it typically pretty short. I have broken it out so that it stands out more.
 % --------------------------------------------------------------------------
 % -- Dedication --
@@ -145,14 +146,14 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
  \vspace*{\fill}
  \begin{center}
    {\LARGE\textsc{Dedication}}
-   
+
   This thesis has been generated through the effort of a village. I would like to thank and dedicate this thesis to my parents, Don Redfoot and Kathy Kenyon, and Dominic Bertolino for their continuous support. My parents not only provided me with immense amounts of emotional support, they also provided editing and feedback on everything in this thesis. I want to thank Dominic Bertolino who in many ways inspired in me the confidence to pursue what I really wanted to do with my life starting with pursuing this master's degree.
 % ***  Your dedication. This section is optional, per the handbook. ***
  \end{center}
  \vspace{\fill}
  \newpage
 
-% ==------------------------------------ Table of Contents -------------------------------------== % 
+% ==------------------------------------ Table of Contents -------------------------------------== %
 % The ToC is built from \chapter, \section, and \subsection headings. It is advisable to add a
   % \label macro to each feature that will show up in the ToC so you can reference it in document.
 \frontmattersection{Table of Contents}
@@ -161,9 +162,9 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
 \newpage
 
 % ==-------------------------------------- List of Tables --------------------------------------== %
-% The LoT is built from \captions with the tables. LaTeX knows what's a table because the \caption 
-  % will be in a table (tabular, longtable, etc) environment. Because we have included the \caption 
-  % package, we can type \caption[What shows up in LoT]{What is rendered near the table in document}. 
+% The LoT is built from \captions with the tables. LaTeX knows what's a table because the \caption
+  % will be in a table (tabular, longtable, etc) environment. Because we have included the \caption
+  % package, we can type \caption[What shows up in LoT]{What is rendered near the table in document}.
   % To exclude a table from the LoT, put nothing in the []'s: \caption[]{Table Won't Show Up in LoT}
   % If the caption in {} is what you want in the LoT, you can omit the []'s.
 \frontmattersection{List of Tables}
@@ -172,9 +173,9 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
 \newpage
 
 % ==------------------------------------- List of Figures --------------------------------------== %
-% The LoF is built from \captions with the figures. LaTeX knows what's a figure because the \caption 
-  % will be in a figure environment. Because we have included the \caption package, we can type 
-  % \caption[What shows up in LoF]{What is rendered near the table in document}. Again, leave []'s 
+% The LoF is built from \captions with the figures. LaTeX knows what's a figure because the \caption
+  % will be in a figure environment. Because we have included the \caption package, we can type
+  % \caption[What shows up in LoF]{What is rendered near the table in document}. Again, leave []'s
   % empty to exclude it from the LoF.
 \frontmattersection{List of Figures}
 \listoffigures
@@ -182,8 +183,8 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
 \newpage
 
 % ==---------------------------------- List of Code Listings -----------------------------------== %
-% The LoCL(?) is built from the \captions with the code listings. LaTeX knows what's a listing 
-  % because the \caption will be in a listing environment (lstinputlisting). Example at end of 
+% The LoCL(?) is built from the \captions with the code listings. LaTeX knows what's a listing
+  % because the \caption will be in a listing environment (lstinputlisting). Example at end of
   % document. Note that you will have to define each language used (see .cls for examples).
 % \frontmattersection{List of Code Listings}
 % \lstlistoflistings
@@ -191,7 +192,7 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
 % \newpage
 
 % ==------------------------------------- List of Acronyms -------------------------------------== %
-% The LoA(?) is built by you each time you need to use an acronym. Then, you call it using \ac or 
+% The LoA(?) is built by you each time you need to use an acronym. Then, you call it using \ac or
   % \acf in your main document. There are notes on how to use this below (and in MAINMATTER).
 \frontmattersection{List of Acronyms}
 \begin{center}
@@ -214,8 +215,10 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
     \acro{fom}[FOM]{Figure of Merit}
     \acro{hes}[HES] {Hybrid Energy System}
     \acro{homer}[HOMER]{Hybrid Optimization Model for Electric Renewable}
+    \acro{ide}[IDE]{Israel Desalination Enterprises}
     \acro{inl}[INL]{Idaho National Laboratory}
     \acro{irr}[IRR]{Internal Rate of Return}
+    \acro{iso}[ISO]{Independent System Operator}
     \acro{lace}[LACE]{Levelized Avoided Cost of Electricity}
     \acro{lcoe}[LCOE]{Levelized Cost of Electricity}
     \acro{lcs}[LCS]{Levelized Cost of Storage}
@@ -231,9 +234,9 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
     \acro{nrc}[NRC]{Nuclear Regulatory Commission}
     \acro{nrel} [NREL] {National Renewable Energy Laboratory}
     \acro{nrhes}[NRHES]{Nuclear Renewable Hybrid Energy System}
-    \acro{nrhess}[NRHES]{Nuclear Renewable Hybrid Energy Systems}
-    
-    \acro{ornl}[ORNL]{Oakridge National Laboratory}
+    \acro{nrhess}[NRHESs]{Nuclear Renewable Hybrid Energy Systems}
+
+    \acro{ornl}[ORNL]{Oak Ridge National Laboratory}
     \acro{pha}[PHA]{Preliminary Hazards Analysis}
     \acro{pvgs}[PV]{Palo Verde Generating Station}
     \acro{raven}[RAVEN]{Risk Analysis Virtual Environment}
@@ -242,14 +245,15 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
     \acro{saidi}[SAIDI]{System Average Interruption Duration Index}
     \acro{saifi}[SAIFI]{System Average Interruption Frequency Index}
     \acro{smrs}[SMRs]{Small Modular Reactors}
-    \acro{ufsar}[U-FSAR]{Updated Final Safety Analysis Report} 
+    \acro{speco}[SPECO]{Specific Exergy Costing}
+    \acro{ufsar}[U-FSAR]{Updated Final Safety Analysis Report}
      % Plural version of an acronym. Usage: \acp{vm}
 \end{acronym}
 
 
 % ========================================= MAINMATTER =========================================== %
 % Mainmatter is where the actual content of your thesis begins. Page numbers are now Arabic numerals.
-\mainmatter  
+\mainmatter
 \setcounter{secnumdepth}{3}	% Numbers parts, chapters, sections, subsections, subsubsections
 
 % Go to a new page, and flush all pending floats from stack. Start the chapter "fresh." Good idea to
@@ -268,13 +272,13 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
 \label{chapter:Introduction}
 
 % You can pull out sections of your input (like chapters) into separate files, and include them with
-  % the \input macro. The benefits to this approach include faster rendering (just render input files 
-  % currently being worked on), cleaner and shorter input files, and ability to reuse sections in 
-  % things like papers. The way \input works is by essentially inserting all text from the \input file 
-  % where the command sits, so usually it works just as if you had typed everything where that line 
+  % the \input macro. The benefits to this approach include faster rendering (just render input files
+  % currently being worked on), cleaner and shorter input files, and ability to reuse sections in
+  % things like papers. The way \input works is by essentially inserting all text from the \input file
+  % where the command sits, so usually it works just as if you had typed everything where that line
   % sits.
-  % Drawbacks include needing to switch files to edit things in different sections, occasionally 
-  % some things don't render well when included in this way, and the fact that some online editors 
+  % Drawbacks include needing to switch files to edit things in different sections, occasionally
+  % some things don't render well when included in this way, and the fact that some online editors
   % (like Overleaf, ShareLatex) has a limit on the number of files a free project can have.
 % I put this here as an example, should you be interested in using it.
 \input{./01Intro.tex}
@@ -300,11 +304,11 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
 \clearpage
 
 % ========================================= REFERENCES =========================================== %
-% Put your references in a separate .bib file. You can manually enter the information in that file, 
+% Put your references in a separate .bib file. You can manually enter the information in that file,
   % but it's easiest to use a tool like Mendeley or Zotero to manage your sources. They allow you to
   % copy individual sources or groups of sources as .bibtex entries that can be pasted into the .bib.
   % You can also export whole libraries or projects in those programs as a single .bib file.
-% It's not a bad idea to briefly annotate your sources in the .bib file (comment above entry) to 
+% It's not a bad idea to briefly annotate your sources in the .bib file (comment above entry) to
   % help locate sources without spending a lot of time looking it up again, especially because you
   % will likely be writing this thing for a year or more.
 
@@ -313,7 +317,7 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
 % Add to table of contents, as bibliography usually is not in ToC
 \addcontentsline{toc}{chapter}{\textsc{\bibname}}
 % Set style. "plain" is fine, or you can look up other ones to play with
-\bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 % Name of separate bibliography file containing your references. Using separate file allows the same
   % .bib file on papers and so forth. Also, most reference managers (Mendeley, Zotero, etc) will
   % export .bib files, making this whole process much easier.
@@ -322,70 +326,119 @@ Now for the wonderful people from University of Idaho I had the opportunity to w
 \newpage
 
 % ========================================= APPENDICES =========================================== %
-% Marks start of appendices. Each appendix is marked as a chapter, and each \chapter will be 
+% Marks start of appendices. Each appendix is marked as a chapter, and each \chapter will be
   % rendered as a separate appendix and appear separately in the ToC.
-\appendix
 
 % ==------------------------------------- Appendix A: ... --------------------------------------== %
 % --------------------------------------------------------------------------
 % -- Appendices --
 \clearpage
 \appendix  % Marks start of appendices
+\chapter{Expert AHP Survey}
 
+The description for the survey which includes all of the assumptions built into the survey is:
+
+The following questionnaire will take 10 to 20 minutes to complete. Thank you for your time and consideration.
+
+The questionnaire below is one part of my research evaluating the potential benefits of applying the risk assessment technique of Analytic Hierarchy Process (AHP) to compare different industrial processes that might be incorporated into a nuclear renewable hybrid energy system.  AHP requires a group of experts determining the relative values associated with each of the options being compared.  The questionnaire  requests your expert opinion on determining the values associated with thermally coupling a desalination plant, a synthetic fuels plant, and a hydrogen production plant to a nuclear power plant.  The three industrial processes are compared based on safety, flexibility, and economic value.
+
+This survey assumes that the process used for hydrogen production is high temperature steam electrolysis with thermal as well as electrical coupling to the nuclear power plant.  The assumed form of desalination is thermal desalination through distillation directly using heat from the nuclear power plant.  The assumed synthetic fuel process is a Fischer-Tropsch method using coal as the hydrocarbon source.  Assume each of the processes consumes the same amount of heat from the nuclear power plant.
+
+The questions below deal with the relative value of each of the industrial processes based on each of the characteristics taken into consideration in this study: safety, ability to fluctuate, and profitability. Ability to fluctuate describes how difficult it is to start and stop the industrial process, as well as the ability of the industrial process to ramp to allow more or less heat to be allocated to electricity production to match demand from the grid. For example, if the process can start and stop, but the initial batch of product is of lower quality, that would negatively affect the "ability to fluctuate" as compared to a process that could start and stop with no impact on the initial batch of product after restarting.  An industrial process that could more or less instantaneously reach full capacity steady state operation would rank higher than an industrial process that would take a long time to reach full capacity steady state operation.
+
+For AHP,  the range of the scale is from 1 to 9, with 1 representing when the two options are thought of as equal for the given characteristic. As can be seen below with the safety comparison of desalination to hydrogen production, you will have three initial options. If you choose that the desalination and hydrogen production are equally safe, that will be recorded as a 1 in the AHP. If you choose, for example, that hydrogen production is safer than desalination, then you will be directed to a second question which determines your view of how much safer hydrogen production is than desalination.
+
+As AHP focuses on collecting expert opinions, you have been selected because you have either published research or a report on nuclear renewable hybrid energy systems, cogeneration, or have worked with a nuclear cogeneration system. I would appreciate it if I could include your name as participating in the research, as can be seen in the first question below.  Your answers will not be shared, only that you were part of the expert group taking this survey.
+
+I recognize that characteristics such as regional accessibility of feedstocks for each of the industrial processes will have a major impact on which industrial process would be pursued in a nuclear renewable hybrid energy system. For the purposes of this research, please assume all regional characteristics are equal.  The goal of this research is to ascertain whether AHP can generally be applied to determining the relative values of different potential industrial processes for a nuclear renewable hybrid energy system.
+
+Thank you for your time and willingness to participate in this research. If you have any questions about the survey, please contact me at:
+
+Emma Redfoot
+redf3263@vandals.uidaho.edu
+(406) 876-2026
+Graduate Research Assistant
+University of Idaho
 % Appendices are done as LaTeX chapters
-\chapter{Your fist appendix}
-\includepdf[pages={1-},scale=.9]{AHP_survey.pdf}
+% \chapter{Expert AHP Survey}
+% \label{ExpertAHP}
 
-Fuzzy Analytic Hierarchy Process Code:
+\includepdf[pages={2-}]{AHP_survey.pdf}
 
+\chapter{Fuzzy Analytic Hierarchy Process}
+\label{App:FAHP}
+
+The following code includes how the fuzzy AHP was performed on the expert AHP survey described above.  The process first involved translating the responses into the ranges descriptive of each of the answers.  Then, the answers from each of the surveys was input into the program.  Then, a geometric mean was found for each of the responses.  Each of the options were then weighted based on the importance of the characteristics, in this case with safety having a much greater weighting than the other two characteristics.
 \includepdf{AHP_Buckley_1.pdf}
 \includepdf{AHP_Buckey_2.pdf}
 \includepdf{AHP_Buckey_3.pdf}
 
-\chapter{Load Following}
+
+\chapter{Pump Data}
+\label{Appendix:pumps}
+
+The following pump datasheets are the direct sources of information for the off-the-shelf pumps used in this research.  IDE Progreen is the company which constructed the world's largest reverse osmosis system.  These pumps have data including the pressure required for the reverse osmosis system using these pumps. The pressure and energy requirement data from the pump datasheets included are the sources for the pump models developed in Aspen HYSYS.
+\includepdf[pages={1-}]{IDE-PROGREEN-Datasheet_1000.pdf}
+\includepdf[pages={1-}]{IDE-PROGREEN-Datasheet_2000.pdf}
+%\includepdf[pages={1-}]{IDE-PROGREEN-Datasheet_5000.pdf}
 
 \chapter{Aspen HYSYS}
-\begin{figure*}
+\label{HYSYSDiagrams}
+
+The following images show some of the MSF and RO configurations included in this thesis.  The MSF system had multiple configurations along with many different temperatures attempted.  Initially, it was unclear if the best configuration would include sending higher temperature water to the MSF system.  After different experiments with the model, it was found that the best outcomes came from running the MSF at 80\degree C.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{6_25CondMSF_25.PNG}
+\caption{\small \sl A much simplified model of the Palo Verde Generating Station's Power Cycle sending 80\degree C heat to the condenser to be used for the multi-stage flash distillation water purification process. With 25\% of the electricity decreased and sent as heat to the MSF system}
+\end{figure}
+\begin{figure}
+\includegraphics[width=\textwidth]{6_25_CondPC_25.PNG}
+\caption{\small \sl A much simplified model of the Palo Verde Generating Station's Power Cycle sending 80\degree C heat to the condenser to be used for the multi-stage flash distillation water purification process. With 25\% of the electricity decreased and sent as heat to the MSF system}
+\end{figure}
+\begin{figure}
+\includegraphics[width=\textwidth]{6_25CondMSF_25.PNG}
+\caption{\small \sl A much simplified model of the Palo Verde Generating Station's Power Cycle sending 80\degree C heat to the condenser to be used for the multi-stage flash distillation water purification process. With 25\% of the electricity decreased and sent as heat to the MSF system}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{80PC.PNG}
 \caption{\small \sl A much simplified model of the Palo Verde Generating Station's Power Cycle sending 80\degree C heat to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
-\begin{figure*}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{80MSF.PNG}
 \caption{\small \sl A simplified model of a 21 stage multi stage flash distillation system functioning with 80\degree C heat from the reactor to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
-\begin{figure*}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{85PC.PNG}
 \caption{\small \sl A much simplified model of the Palo Verde Generating Station's Power Cycle sending 85 \degree C heat to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
-\begin{figure*}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{85MSF.PNG}
 \caption{\small \sl A simplified model of a 21 stage multi stage flash distillation system functioning with 85 \degree C heat from the reactor to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
-
-\begin{figure*}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{90PC.PNG}
 \caption{\small \sl A much simplified model of the Palo Verde Generating Station's Power Cycle sending 90\degree C heat to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
-\begin{figure*}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{90MSF.PNG}
 \caption{\small \sl A simplified model of a 21 stage multi stage flash distillation system functioning with 90\degree C heat from the reactor to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
-\begin{figure*}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{95PC.PNG}
 \caption{\small \sl A much simplified model of the Palo Verde Generating Station's Power Cycle sending 95\degree C heat to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
-\begin{figure*}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{95MSF.PNG}
 \caption{\small \sl A simplified model of a 21 stage multi stage flash distillation system functioning with 95\degree C heat from the reactor to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
-\begin{figure*}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{100PC.PNG}
 \caption{\small \sl A much simplified model of the Palo Verde Generating Station's Power Cycle sending 100\degree C heat to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
-\begin{figure*}
+\end{figure}
+\begin{figure}
 \includegraphics[width=\textwidth]{100MSF.PNG}
 \caption{\small \sl A simplified model of a 21 stage multi stage flash distillation system functioning with 100\degree C heat from the reactor to the condenser to be used for the multi-stage flash distillation water purification process}
-\end{figure*}
+\end{figure}
 \begin{figure*}
 \includegraphics[width=\textwidth]{105PC.PNG}
 \caption{\small \sl A much simplified model of the Palo Verde Generating Station's Power Cycle sending 105\degree C heat to the condenser to be used for the multi-stage flash distillation water purification process}
@@ -418,25 +471,30 @@ Fuzzy Analytic Hierarchy Process Code:
 
 \newpage
 
-\section{Aspen HYSYS Water Composition Calculation}
+\chapter{Aspen HYSYS Water Composition Calculation}
+In order to assess the purity of the water produced through the MSF system, the water input into the system needed to closely match the brackish groundwater found in Arizona.  In order to demonstrate a worst case scenario, the thesis multiplied the particulates in the system by about 10.  The table below demonstrates the dimensional analysis implemented in order to find the mole percent of each particulate.
 
-\includepdf{Brackish_-_Sheet1.pdf}
+\begin{figure}
+\centering
+\includegraphics[width=.9\textwidth]{watercalc.PNG}
+\caption{\small \sl Screen shot of Excel Calculation of the component makeup for the brackish underground water in Arizona}
+\end{figure}
 
-\chapter{RAVEN}
-\includepdf{convert_multiple_histories.pdf}
+% \chapter{Economic Calculations}
+% The economic calculations
+
+% \includepdf[pages={1-}]{CleanedUpData.pdf}
+
+\chapter{RAVEN Input Code}
+The following code displays how the Arizona Public Service's hourly demand data was initially translated into daily time series in the eia datetime general python code.  Then, the convert multiple histories code displays taking the data and separating it into the seasons as defined by the Farmer's Almanac.  Finally, the train eia xml document displays the RAVEN input document for one season, in this case fall.  This xml document shows how the data is input into the system, which then trains the ARMA model to have similar statistical outcomes as the real data input into the system.  Finally, the Arizona fall document generates the synthetic data and plots it in the graphs included in this thesis.
+
 \includepdf{eia_data_python.pdf}
+\includepdf{convert_multiple_histories.pdf}
+\includepdf{RAVEN_APS_train_eia_fall.pdf}
+\includepdf{RAVEN_APS_Arizona_fall.pdf}
 
-% ** This is an example of a YAML file listing, but it could be anythig, e.g full experiment results, or list of equipment used. **
-% \clearpage
-% \chapter{Exercise Specification}
-% \lstinputlisting[firstline=56, firstnumber=1, language=yaml,caption=Exercise Specification]{Specifications/exercise-specification.yaml}
 
-% ** Example of a Python script code listing **
-% \clearpage
-% \chapter{vsphere-info Script Source Code}
-% \lstinputlisting[firstline=16, firstnumber=1, language=python, caption=vsphere-info script]{Code/scripts/vsphere_info.py}
 
-\clearpage
 
 % Below are the examples of code listings that Christopher Goes, Matthew Brown, Cara Leatherman, and
   % Chris Zeoli put together. First is a YAML file listing, which has a definition in the .cls file.
